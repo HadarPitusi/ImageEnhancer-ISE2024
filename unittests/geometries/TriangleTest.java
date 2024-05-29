@@ -47,4 +47,5 @@ class TriangleTest {
         // ensure |result| = 1
         assertEquals(1, tri.getNormal(new Point(0, 0, 1)).length(), DELTA, "Polygon's normal is not a unit vector");
     }
+
 }
