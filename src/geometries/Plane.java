@@ -63,7 +63,7 @@ public class Plane implements Geometry {
         if (isZero(nv))// מקביל למישור
             return null;
        double t=alignZero(n_qp/nv);
-       if (t<=0)
+       if (t<=0)//מתחיל אחרי המישור
            return null;
        return List.of(ray.getPoint(t));
 

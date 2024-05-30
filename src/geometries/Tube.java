@@ -6,6 +6,8 @@ import primitives.Vector;
 
 import java.util.List;
 
+import static primitives.Util.isZero;
+
 public class Tube extends RadialGeometry {
 
     /** Radius of the main axis of the cylinder. */
@@ -24,7 +26,9 @@ public class Tube extends RadialGeometry {
     @Override
     public Vector getNormal(Point point) {
         double t=point.subtract(axis.getHead()).dotProduct(axis.getDirection());
-        Point projection=axis.getHead().add(axis.getDirection().scale(t));
+        if(isZero(t))
+            throw new IllegalArgumentException("ERROR: the vector is perpendicular to the ray");
+        Point projection=axis.getPoint(t);
         return point.subtract(projection).normalize();
     }
 
