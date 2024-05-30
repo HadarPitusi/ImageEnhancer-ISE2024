@@ -23,6 +23,13 @@ public class Geometries implements Intersectable{
     }
     @Override
     public List<Point> findIntersections(Ray ray) {
-        return null;
+        List<Point> intersections = new LinkedList<>();
+        for (Intersectable geometry : geometries) {
+            List<Point> tempIntersections = geometry.findIntersections(ray);
+            if (tempIntersections != null) {
+                intersections.addAll(tempIntersections);
+            }
+        }
+        return intersections.isEmpty() ? null : intersections;
     }
 }
