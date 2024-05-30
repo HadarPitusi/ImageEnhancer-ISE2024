@@ -6,6 +6,8 @@ import primitives.Vector;
 
 import java.util.List;
 
+import static primitives.Util.*;
+
 public class Plane implements Geometry {
 
     private final Point q;
@@ -50,6 +52,21 @@ public class Plane implements Geometry {
 
     @Override
     public List<Point> findIntersections(Ray ray) {
-        return null;
+        if (q.equals(ray.getHead()))//נקודת התחלת הקרן ונקודת הייצוג מתלכדות
+            return null;
+        Vector v=ray.getDirection();
+        Vector q_p0=q.subtract(ray.getHead());
+        double n_qp=normal.dotProduct(q_p0);
+        if (isZero(n_qp))//נקודת התחלת הקרן היא על המישור
+            return null;
+        double nv=normal.dotProduct(v);
+        if (isZero(nv))// מקביל למישור
+            return null;
+       double t=alignZero(n_qp/nv);
+       if (t<=0)
+           return null;
+       return List.of(ray.getPoint(t));
+
+
     }
 }

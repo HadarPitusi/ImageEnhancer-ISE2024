@@ -58,9 +58,9 @@ class PlaneTest {
         Plane p=new Plane (new Point(1,0,0), new Point(1,2,0), new Point(0,1,0));
         // ============ Equivalence Partitions Tests ==============
         // TC01 חותך לא מקביל לא מאונך
-        final var result1 = p.findIntersections(new Ray(new Point(0,0,-2), new Vector(-2,7,1))).stream().toList();
+        final var result1 = p.findIntersections(new Ray(new Point(0,0,-2), new Vector(0,3,2))).stream().toList();
         assertEquals(1, result1.size(), "Wrong number of points");
-        assertEquals(List.of(new Point(0, 4.66666667, 0)), result1, "Ray crosses Plane");
+        assertEquals(List.of(new Point(0, 3, 0)), result1, "Ray crosses Plane");
         //TC02 לא חותך לא מקביל לא מאונך
         assertNull(p.findIntersections(new Ray(new Point(0,0,1), new Vector(-2,7,1))), "Wrong number of points");
 

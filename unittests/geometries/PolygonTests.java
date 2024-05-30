@@ -6,7 +6,10 @@ import org.junit.jupiter.api.Test;
 
 import geometries.Polygon;
 import primitives.Point;
+import primitives.Ray;
 import primitives.Vector;
+
+import java.util.List;
 
 /**
  * Testing Polygons
@@ -108,6 +111,16 @@ public class PolygonTests {
 
    @Test
    void testFindIntersections() {
+      Polygon pol = new Polygon( new Point(0, 0, 1),
+              new Point(1, 0, 0),
+              new Point(0, 1, 0),
+              new Point(-1, 1, 1));
+      // ============ Equivalence Partitions Tests ==============
+      //TC01: חותך באמצע
+      final var result1 =pol.findIntersections(new Ray(new Point(0.5,0.1,0),
+              new Vector(0,0,1))).stream().toList();
+      assertEquals(1, result1.size(), "Wrong number of points");
+      assertEquals(List.of(new Point(0.5,0.5,0.5)), result1, "Ray crosses sphere");
    }
 
 }
