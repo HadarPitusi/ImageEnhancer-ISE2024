@@ -24,22 +24,22 @@ public class Point {
 
     /**
      * Constructor to initialize Point based doubl3 value's
-     * @param double3 the values for the new Point
+     * @param xyz the values for the new Point
      */
-    public Point(Double3 double3) {
-        this.xyz = double3;
+    public Point(Double3 xyz) {
+        this.xyz = xyz;
     }
 
     /**
      * Calculates subtraction.
-     * @param point2 the point we want to sub
+     * @param point the point we want to sub
      * @return the Vector result
      * @throws IllegalArgumentException in case of point-itself(vector=(0,0,0))
      */
-    public Vector subtract(Point point2) {
-        if (xyz.subtract(point2.xyz).equals(Double3.ZERO))
+    public Vector subtract(Point point) {
+        if (xyz.subtract(point.xyz).equals(Double3.ZERO))
             throw new IllegalArgumentException("ERROR: (point - itself) it's Illegal");
-        return new Vector(xyz.subtract(point2.xyz));
+        return new Vector(xyz.subtract(point.xyz));
     }
 
     /**
@@ -53,23 +53,23 @@ public class Point {
 
     /**
      * Calculates distance Squared
-     * @param point2 the point from which we want to check the distance.
+     * @param point the point from which we want to check the distance.
      * @return the distance squared
      */
-    public double distanceSquared(Point point2) {
-        double x = xyz.d1 - point2.xyz.d1;
-        double y = xyz.d2 - point2.xyz.d2;
-        double z = xyz.d3 - point2.xyz.d3;
+    public double distanceSquared(Point point) {
+        double x = xyz.d1 - point.xyz.d1;
+        double y = xyz.d2 - point.xyz.d2;
+        double z = xyz.d3 - point.xyz.d3;
         return ((x * x) + (y * y) + (z * z));
     }
 
     /**
      * Calculates distance
-     * @param point2 the point from which we want to check the distance.
+     * @param point the point from which we want to check the distance.
      * @return the distance.
      */
-    public double distance(Point point2) {
-        return (Math.sqrt(distanceSquared(point2)));
+    public double distance(Point point) {
+        return (Math.sqrt(distanceSquared(point)));
     }
 
     @Override

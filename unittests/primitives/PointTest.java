@@ -6,6 +6,7 @@ import static java.lang.Math.sqrt;
 import static org.junit.jupiter.api.Assertions.*;
 
 class PointTest {
+    private final double DELTA = 0.000001;
 
     @Test
     void testSubtract() {
@@ -27,15 +28,15 @@ class PointTest {
     void testAdd() {
         // ============ Equivalence Partitions Tests ==============
         // TC01: There is a simple single test here
-        Point  p1 = new Point(1, 2, 3);
-        Vector  v1 = new Vector(2, 4, 6);
+        Point  point = new Point(1, 2, 3);
+        Vector  vector = new Vector(2, 4, 6);
         //Makes sure the value of the connection is correct
         assertEquals(new Point(3,6,9),
-                p1.add(v1),
+                point.add(vector),
                 "ERROR: (point + vector) = other point does not work correctly");
        //Connecting a vector with its opposite vector
         assertEquals(new Point(0,0,0),
-                p1.add(new Vector(-1,-2,-3)),
+                point.add(new Vector(-1,-2,-3)),
                 "ERROR: (point + vector) = center of coordinates does not work correctly");
     }
 
@@ -48,12 +49,12 @@ class PointTest {
         //Makes sure that the value of the distance between a point and itself in the square is correct
         assertEquals(0,
                 p1.distanceSquared(p1),
-                0.000001,
+                DELTA,
                 "ERROR: point squared distance to itself is not zero");
         //Makes sure that the value of the distance between two points in the square is correct
         assertEquals(14,
                 p2.distanceSquared(p1),
-                0.000001,
+                DELTA,
                 "ERROR: squared distance between points is wrong");
     }
 
@@ -67,12 +68,12 @@ class PointTest {
         //Makes sure that the value of the distance between a point and itself is correct
         assertEquals(0,
                 p1.distance(p1),
-                0.000001,
+                DELTA,
                 "ERROR: point distance to itself is not zero");
         //Makes sure that the value of the distance between two points is correct
         assertEquals(sqrt(27),
                 p2.distance(p1),
-                0.000001,
+                DELTA,
                 "ERROR: squared distance between points is wrong");
     }
 }

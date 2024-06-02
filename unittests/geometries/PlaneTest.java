@@ -30,11 +30,11 @@ class PlaneTest {
     void testGetNormal() {
         // ============ Equivalence Partitions Tests ==============
         // TC01: There is a simple single test here - using a quad
-        Plane p = new Plane(new Point(0, 2, 3), new Point(0, 1, 0), new Point(1, 1, 1));
+        Plane plane = new Plane(new Point(0, 2, 3), new Point(0, 1, 0), new Point(1, 1, 1));
         // Make sure the values of the normal are correct
-        assertEquals(new Vector(-0.30151134457776363, -0.9045340337332909, 0.30151134457776363), p.getNormal(), "ERROR: Plane's normal is not a unit vector");
+        assertEquals(new Vector(-0.30151134457776363, -0.9045340337332909, 0.30151134457776363), plane.getNormal(), "ERROR: Plane's normal is not a unit vector");
         // ensure |result| = 1
-        assertEquals(1, p.getNormal().length(), DELTA, "ERROR: Plane's normal is not a unit vector");
+        assertEquals(1, plane.getNormal().length(), DELTA, "ERROR: Plane's normal is not a unit vector");
     }
 
 
@@ -46,40 +46,40 @@ class PlaneTest {
         //תהיות חשובות
         //יכולה להיות בעיה עם הכיוון? להוסיף בדיקה?
         Point point = new Point(3, 1, 2);
-        Plane p = new Plane(new Point(0, 1, 1), new Point(0, 1, 0), new Point(1, 1, 1));
+        Plane plane = new Plane(new Point(0, 1, 1), new Point(0, 1, 0), new Point(1, 1, 1));
         // Make sure the values of the normal are correct
-        assertEquals(new Vector(0, -1, 0), p.getNormal(point), "ERROR: wrong normal value");
+        assertEquals(new Vector(0, -1, 0), plane.getNormal(point), "ERROR: wrong normal value");
         // ensure |result| = 1
-        assertEquals(1, p.getNormal(point).length(), DELTA, "ERROR: Plane's normal is not a unit vector");
+        assertEquals(1, plane.getNormal(point).length(), DELTA, "ERROR: Plane's normal is not a unit vector");
     }
 
     @Test
     void testFindIntersections() {
-        Plane p = new Plane(new Point(1, 0, 0), new Point(1, 2, 0), new Point(0, 1, 0));
+        Plane plane = new Plane(new Point(1, 0, 0), new Point(1, 2, 0), new Point(0, 1, 0));
         // ============ Equivalence Partitions Tests ==============
         // TC01 חותך לא מקביל לא מאונך
-        final var result1 = p.findIntersections(new Ray(new Point(0, 0, -2), new Vector(0, 3, 2))).stream().toList();
+        final var result1 = plane.findIntersections(new Ray(new Point(0, 0, -2), new Vector(0, 3, 2))).stream().toList();
         assertEquals(1, result1.size(), "Wrong number of points");
         assertEquals(List.of(new Point(0, 3, 0)), result1, "Ray crosses Plane");
         //TC02 לא חותך לא מקביל לא מאונך
-        assertNull(p.findIntersections(new Ray(new Point(0, 0, 1), new Vector(-2, 7, 1))), "Wrong number of points");
+        assertNull(plane.findIntersections(new Ray(new Point(0, 0, 1), new Vector(-2, 7, 1))), "Wrong number of points");
 
         // =============== Boundary Values Tests ==================
         //TC10 הקרן מונחת על המישור
-        assertNull(p.findIntersections(new Ray(new Point(1, 2, 0), new Vector(1, 0, 0))), "Wrong number of points");
+        assertNull(plane.findIntersections(new Ray(new Point(1, 2, 0), new Vector(1, 0, 0))), "Wrong number of points");
         //TC11 הקרן מקבילה למישור אך לא מונחת עליו
-        assertNull(p.findIntersections(new Ray(new Point(0, 0, 1), new Vector(1, 0, 0))), "Wrong number of points");
+        assertNull(plane.findIntersections(new Ray(new Point(0, 0, 1), new Vector(1, 0, 0))), "Wrong number of points");
         //TC12 מאונך למישור מתחיל מתחתיו, חיתוך 1
-        final var result2 = p.findIntersections(new Ray(new Point(0, -1, -2), new Vector(0, 0, 1))).stream().toList();
+        final var result2 = plane.findIntersections(new Ray(new Point(0, -1, -2), new Vector(0, 0, 1))).stream().toList();
         assertEquals(1, result2.size(), "Wrong number of points");
         assertEquals(List.of(new Point(0, -1, 0)), result2, "Ray crosses Plane");
         //TC13  מאונך למישור מתחיל המישור
-        assertNull(p.findIntersections(new Ray(new Point(1, 2, 0), new Vector(0, 0, 1))), "Wrong number of points");
+        assertNull(plane.findIntersections(new Ray(new Point(1, 2, 0), new Vector(0, 0, 1))), "Wrong number of points");
         //TC14 מאונך מתחיל אחרי המישור
-        assertNull(p.findIntersections(new Ray(new Point(0, 0, 1), new Vector(0, 0, 1))), "Wrong number of points");
+        assertNull(plane.findIntersections(new Ray(new Point(0, 0, 1), new Vector(0, 0, 1))), "Wrong number of points");
         //TC15 מתחילה בנקודת הייצוג של המישור,לא מאונך ולא מקביל
-        assertNull(p.findIntersections(new Ray(new Point(1, 0, 0), new Vector(-2, 7, 1))), "Wrong number of points");
+        assertNull(plane.findIntersections(new Ray(new Point(1, 0, 0), new Vector(-2, 7, 1))), "Wrong number of points");
         //TC16 מתחיל מנקודה רנדומלית על המישור, לא מאונך ולא מקביל
-        assertNull(p.findIntersections(new Ray(new Point(1, 2, 0), new Vector(-2, 7, 1))), "Wrong number of points");
+        assertNull(plane.findIntersections(new Ray(new Point(1, 2, 0), new Vector(-2, 7, 1))), "Wrong number of points");
     }
 }

@@ -18,12 +18,12 @@ public class Vector extends Point {
 
     /**
      * Constructor to initialize Vector based double3 value's.
-     * @param double3 the values for the new Vector(and Point..)
+     * @param xyz the values for the new Vector(and Point..)
      * @throws IllegalArgumentException in case of zero vector
      */
-    public Vector(Double3 double3) {
-        super(double3);
-        if (double3.equals(Double3.ZERO))
+    public Vector(Double3 xyz) {
+        super(xyz);
+        if (xyz.equals(Double3.ZERO))
             throw new IllegalArgumentException("Vector is zero");
     }
 
@@ -58,34 +58,34 @@ public class Vector extends Point {
 
     /**
      * Addition a vector.
-     * @param vector2 the vector we want to add.
+     * @param vector the vector we want to add.
      * @return the result Vector.
      * @throws IllegalArgumentException in case of Vector-itself
      */
-    public Vector add(Vector vector2) {
-        if (this.xyz.add(vector2.xyz).equals(Double3.ZERO))
+    public Vector add(Vector vector) {
+        if (this.xyz.add(vector.xyz).equals(Double3.ZERO))
             throw new IllegalArgumentException("ERROR: vector - itself");
-        return new Vector(this.xyz.add(vector2.xyz));
+        return new Vector(this.xyz.add(vector.xyz));
     }
 
     /**
      * Scalar multiplication with a vector
-     * @param vector2 The vector we want to multiply.
+     * @param vector The vector we want to multiply.
      * @return the result.
      */
-    public double dotProduct(Vector vector2) {
-        return (this.xyz.d1 * vector2.xyz.d1 + this.xyz.d2 * vector2.xyz.d2 + this.xyz.d3 * vector2.xyz.d3);
+    public double dotProduct(Vector vector) {
+        return (this.xyz.d1 * vector.xyz.d1 + this.xyz.d2 * vector.xyz.d2 + this.xyz.d3 * vector.xyz.d3);
     }
 
     /**
      * Cross product between 2 vectors.
-     * @param vector2 the vector we want to multiply.
+     * @param vector the vector we want to multiply.
      * @return the result Vector.
      */
-    public Vector crossProduct(Vector vector2) {
-        Vector vec = new Vector(this.xyz.d2 * vector2.xyz.d3 - this.xyz.d3 * vector2.xyz.d2,
-                this.xyz.d3 * vector2.xyz.d1 - this.xyz.d1 * vector2.xyz.d3,
-                this.xyz.d1 * vector2.xyz.d2 - this.xyz.d2 * vector2.xyz.d1
+    public Vector crossProduct(Vector vector) {
+        Vector vec = new Vector(this.xyz.d2 * vector.xyz.d3 - this.xyz.d3 * vector.xyz.d2,
+                this.xyz.d3 * vector.xyz.d1 - this.xyz.d1 * vector.xyz.d3,
+                this.xyz.d1 * vector.xyz.d2 - this.xyz.d2 * vector.xyz.d1
                  );
         return vec;
     }

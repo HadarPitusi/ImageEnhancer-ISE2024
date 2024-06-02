@@ -33,10 +33,10 @@ class VectorTest {
     void testLengthSquared() {
         // ============ Equivalence Partitions Tests ==============
         // TC01: There is a simple single test here
-        Vector v1=new Vector(1,2,3);
+        Vector vector=new Vector(1,2,3);
         //Makes sure that the calculation of the length of the squared section is correct
         assertEquals(14,
-                v1.lengthSquared(),
+                vector.lengthSquared(),
                 DELTA,
                 "ERROR: lengthSquared() wrong value");
     }
@@ -45,15 +45,15 @@ class VectorTest {
     void testScale() {
         // ============ Equivalence Partitions Tests ==============
         // TC01: There is a simple single test here
-        Vector v1= new Vector(2,3,4);
+        Vector vector= new Vector(2,3,4);
         //Verifies correct scalar multiplication calculation
         assertEquals(new Vector(-4,-6,-8),
-                v1.scale(-2),
+                vector.scale(-2),
                 "ERROR: scale() wrong value");
         // =============== Boundary Values Tests ==================
         // TC10: Scalar multiplication by 0
         assertThrows(IllegalArgumentException.class,
-                ()->v1.scale(0),
+                ()->vector.scale(0),
                 "ERROR: scale() by 0 does not throw an exception");
     }
 
@@ -62,9 +62,9 @@ class VectorTest {
         // ============ Equivalence Partitions Tests ==============
         // TC01: There is a simple single test here
         //Ensures correct vector length calculation
-        Vector v1=new Vector(1,2,3);
+        Vector vector=new Vector(1,2,3);
         assertEquals(sqrt(14),
-                v1.length(),
+                vector.length(),
                 DELTA,
                 "ERROR: length() wrong value");
     }
@@ -132,10 +132,10 @@ class VectorTest {
         //לבדוק מה הכוונה שהוקטור בכיוון הנגדי- להוסיף בדיקה?
         // ============ Equivalence Partitions Tests ==============
         // TC01: There is a simple single test here
-        Vector v = new Vector(1, 2, 3);
+        Vector vector = new Vector(1, 2, 3);
         //Checks that the normalization brings correct values
         assertEquals(new Vector(0.2672612419124244,0.5345224838248488,0.8017837257372732),
-                v.normalize(),
+                vector.normalize(),
                 "ERROR: normalize() wrong value");
     }
 
