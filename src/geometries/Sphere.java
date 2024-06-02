@@ -3,6 +3,7 @@ package geometries;
 import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
+
 import static primitives.Util.*;
 
 import java.util.List;
@@ -17,6 +18,7 @@ public class Sphere extends RadialGeometry {
 
     /**
      * Constructor to initialize Sphere based on radius and center point.
+     *
      * @param radius sphere's radius.
      * @param center center point.
      */
@@ -27,41 +29,83 @@ public class Sphere extends RadialGeometry {
 
     @Override
     public Vector getNormal(Point point) {
-        return(point.subtract(center).normalize());
+        return (point.subtract(center).normalize());
     }
 
     @Override
     public List<Point> findIntersections(Ray ray) {
-        Point p0=ray.getHead();
+        Point p0 = ray.getHead();
         Vector center_p0;
         try {//p0 במרכז
             center_p0 = (center.subtract(p0));
-        }catch (IllegalArgumentException error){
+        } catch (IllegalArgumentException error) {
             return List.of(p0.add(ray.getDirection().scale(radius)));
         }
-        double tm=alignZero(center_p0.dotProduct(ray.getDirection()));
-        double d=(center_p0.lengthSquared()-tm*tm);
-        double maxDistance=radius*2;
-        if (d>=radius)//הקרן משיקה או מחוץ למעגל- אין נק חיתוך
+        double tm = alignZero(ray.getDirection().dotProduct(center_p0));
+        double d = alignZero(sqrt(center_p0.lengthSquared() - tm * tm));
+        double maxDistance = radius * 2;
+        if (d >= radius)//הקרן משיקה או מחוץ למעגל- אין נק חיתוך
             return null;
-        double th=alignZero((radius*radius-d));
-        if (th<=0)
-            return null;
-        th=sqrt(th);
-        double t1=tm-th;
-        double t2=tm+th;
-        if (alignZero(t2)<=0||alignZero(maxDistance-t1)<=0)
-            return null;
-        boolean check=alignZero(maxDistance-t2)<=0;
-        if (alignZero(t1)<=0)
-            return check? null: List.of(ray.getPoint(t2));
-        return check? List.of(ray.getPoint(t1)):  List.of(ray.getPoint(t1),ray.getPoint(t2));
-       /** if (t1>0 && t2>0)
-           return List.of(ray.getPoint(t1),ray.getPoint(t2));
-        if (t2>0)
+        double th = alignZero(sqrt((radius * radius - d * d)));
+
+        double t1 = tm - th;
+        double t2 = tm + th;
+       /** if (t1 > 0 && t2 > 0 && alignZero(t1 - maxDistance) <= 0 && alignZero(t2 - maxDistance) <= 0)
+            return List.of(ray.getPoint(t1), ray.getPoint(t2));
+        boolean check = alignZero(t2 - maxDistance) <= 0;
+        if (t1 < 0 && alignZero(t1 - maxDistance) <= 0)
             return List.of(ray.getPoint(t2));
-        if (t1>0)
+        if (t2 < 0 && alignZero(t2 - maxDistance) <= 0)
             return List.of(ray.getPoint(t1));
-        return null;**/
+        //return check? null: List.of(ray.getPoint(t2));
+        //return check? List.of(ray.getPoint(t1)):  List.of(ray.getPoint(t1),ray.getPoint(t2)); **/
+         if (t1>0 && t2>0)
+             return List.of(ray.getPoint(t1),ray.getPoint(t2));
+         if (t2>0)
+             return List.of(ray.getPoint(t2));
+         if (t1>0)
+             return List.of(ray.getPoint(t1));
+         return null;
+
+
+       /** Point p0 = ray.getHead();
+        Vector dir = ray.getDirection();
+        double maxDistance = radius * 2;
+        // Deals with case where ray starts from the center of the sphere
+        if (p0.equals(center))
+            return List.of(p0.add(ray.getDirection().scale(radius)));
+
+        // Finding the hypotenuse, base and perpendicular of the triangle formed by
+        // ray's starting point, the center of the sphere and the intersection point of
+        // the ray and the perpendicular line crosing the sphere's center.
+        Vector hypotenuse = this.center.subtract(p0);
+        double base = dir.dotProduct(hypotenuse);
+        double perpendicular = hypotenuse.lengthSquared() - base * base;
+        double insideSquared = radius*radius- perpendicular;
+
+        // Dealing with a case in which the ray is perpendicular to the sphere at the
+        // intersection point, or passes outside the Sphere.
+        if (alignZero(insideSquared) <= 0)
+            return null;
+
+        // Returning intersection points, ensuring that only those intersected by the
+        // ray are returned.
+        double inside = Math.sqrt(insideSquared);
+        double t2 = base + inside;
+        double t1 = base - inside;
+        if (alignZero(t2) <= 0 || alignZero(maxDistance - t1) <= 0)
+            return null;
+
+        boolean t2NotInRange = alignZero(maxDistance - t2) <= 0;
+
+        if (alignZero(t1) <= 0) //
+            return t2NotInRange //
+					? null //
+					: List.of(ray.getPoint(t2));
+
+        return t2NotInRange //
+                ? List.of(ray.getPoint(t1)) //
+                : List.of(ray.getPoint(t1), ray.getPoint(t2));**/
+
     }
 }

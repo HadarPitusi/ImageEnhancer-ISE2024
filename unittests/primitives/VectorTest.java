@@ -75,7 +75,7 @@ class VectorTest {
         // TC01: There is a simple single test here
         Vector v1=new Vector(1,2,3);
         Vector v2=new Vector(2,3,4);
-        //Makes sure that the computation of adding a vector to a vector does not throw an exception
+        //Make sure that the computation of adding a vector to a vector does not throw an exception
         assertDoesNotThrow(()->v1.add(v2),
                 "Throwing an unnecessary exception");
         //Makes sure that the calculation of adding vector to vector is correct

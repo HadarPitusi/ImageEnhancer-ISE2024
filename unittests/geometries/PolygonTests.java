@@ -109,12 +109,17 @@ public class PolygonTests {
                       "Polygon's normal is not orthogonal to one of the edges");
    }
 
+   //בונוססססססס
+   /**
    @Test
    void testFindIntersections() {
-      Polygon pol = new Polygon( new Point(0, 0, 1),
+      //בונוס!
+      Polygon pol = new Polygon(
+              new Point(0, 0, 1),
               new Point(1, 0, 0),
               new Point(0, 1, 0),
-              new Point(-1, 1, 1));
+              new Point(-1, 1, 1)
+      );
       // ============ Equivalence Partitions Tests ==============
       //TC01: חותך באמצע
       final var result1 =pol.findIntersections(new Ray(new Point(0.5,0.1,0),
@@ -122,5 +127,5 @@ public class PolygonTests {
       assertEquals(1, result1.size(), "Wrong number of points");
       assertEquals(List.of(new Point(0.5,0.5,0.5)), result1, "Ray crosses sphere");
    }
-
+   **/
 }

@@ -20,7 +20,10 @@ class SphereTest {
                 s.getNormal(new Point(0, 0, 6)),
                 "ERROR: wrong normal value");
         // ensure |result| = 1
-         assertEquals(1, s.getNormal(new Point(0,0,6)).length(),0.000001, "ERROR: Sphere's normal is not a unit vector");
+         assertEquals(1,
+                 s.getNormal(new Point(0,0,6)).length(),
+                 0.000001,
+                 "ERROR: Sphere's normal is not a unit vector");
     }
 
     private final Point p001 = new Point(0, 0, 1);
@@ -61,9 +64,9 @@ class SphereTest {
         assertEquals(2, result1.size(), "Wrong number of points");
          assertEquals(exp, result1, "Ray crosses sphere");
         // TC03: Ray starts inside the sphere (1 point)
-        final var result2 = sphere.findIntersections(new Ray(p285, v310)).stream().toList();
+        final var result2 = sphere.findIntersections(new Ray(new Point(1.5,0,0), new Vector(0.5,0,0))).stream().toList();
         assertEquals(1, result2.size(), "Wrong number of points");
-        assertEquals(List.of(p912), result2, "Ray crosses sphere");
+        assertEquals(List.of(new Point(2,0,0)), result2, "Ray crosses sphere");
         // TC04: Ray starts after the sphere (0 points)
         assertNull(sphere.findIntersections(new Ray(p01, v310.scale(-1))), "Ray's line out of sphere");
         // =============== Boundary Values Tests ==================

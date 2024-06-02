@@ -42,22 +42,29 @@ class TriangleTest {
         // ============ Equivalence Partitions Tests ==============
         // TC01: There is a simple single test here - using a quad
 
-        Triangle tri = new Triangle(new Point(0, 0, 1),
+        Triangle tri = new Triangle(
+                new Point(0, 0, 1),
                 new Point(1, 0, 0),
-                new Point(0, 1, 0));
+                new Point(0, 1, 0)
+        );
         // ensure there are no exceptions
         assertDoesNotThrow(() -> tri.getNormal(new Point(0, 0, 1)), "");
         // ensure |result| = 1
-        assertEquals(1, tri.getNormal(new Point(0, 0, 1)).length(), DELTA, "Polygon's normal is not a unit vector");
+        assertEquals(1,
+                tri.getNormal(new Point(0, 0, 1)).length(),
+                DELTA,
+                "Polygon's normal is not a unit vector");
     }
 
     @Test
     public void testFindIntersections() {
         // ============ Equivalence Partitions Tests ==============
         //TC01: חותך באמצע
-        Triangle tri = new Triangle(new Point(3,0,0),
+        Triangle tri = new Triangle(
+                new Point(3,0,0),
                 new Point(-3, 0, 0),
-                new Point(0, 3, 0));
+                new Point(0, 3, 0)
+        );
         final var result1 = tri.findIntersections(new Ray(new Point(0,1,-1), new Vector(0,0,1))).stream().toList();
         assertEquals(1, result1.size(), "Wrong number of points");
         assertEquals(List.of(new Point(0,1,0)), result1, "Ray crosses sphere");
