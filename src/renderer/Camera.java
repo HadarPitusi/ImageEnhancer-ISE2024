@@ -46,8 +46,8 @@ public class Camera implements Cloneable{
             return this;
         }
 
-        public Camera build() throws CloneNotSupportedException {
-           final String missingData1="Missing rendor data";
+        public Camera build() {
+            final String missingData1="Missing rendor data";
             final String NameClassOfMissing="camera";
             if (camera.p0==null)
                 throw new MissingResourceException(missingData1, NameClassOfMissing,"the point of distance between the camera");
@@ -59,6 +59,7 @@ public class Camera implements Cloneable{
 
             return (Camera) camera.clone();
         }
+
     }
 
     private Camera() {
@@ -80,5 +81,9 @@ public class Camera implements Cloneable{
         return null;
     }
 
+
+    public static Builder getBuilder(){
+        return new Builder();
+    }
 
 }
