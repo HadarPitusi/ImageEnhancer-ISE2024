@@ -21,8 +21,9 @@ public class Triangle extends Polygon {
 
     @Override
     public List<Point> findIntersections(Ray ray) {
-        List<Point> check = plane.findIntersections(ray);//חיתוך עם המישור שהמשולש מוכל בו
-        if (check == null)
+        //Intersection with the surface in which the triangle is contained
+        List<Point> planeIntersection = plane.findIntersections(ray);
+        if (planeIntersection == null)
             return null;
         Point p0 = ray.getHead();
         Vector v = ray.getDirection();
@@ -35,11 +36,13 @@ public class Triangle extends Polygon {
         double d1 = v.dotProduct(n1);
         double d2 = v.dotProduct(n2);
         double d3 = v.dotProduct(n3);
-        if (isZero(d1) || isZero(d2) || isZero(d3))//לפחות אחת מהמכפלות הסקלריות שווה אפס- אין חיתוך
+        //At least one of the scalar products is equal to zero - no cutting
+        if (isZero(d1) || isZero(d2) || isZero(d3))
             return null;
-        if (((d1 > 0 && d2 > 0 && d3 > 0) || (d1 < 0 && d2 < 0 && d3 < 0)))// כל המכפלות הסקלריות חיוביות או  כולם שליליות-נקודת החיתוך בתוך המשולש
-            return check;
-        return null;// הנקודה על הצלע או על הקודקוד
-
+        //All scalar multiples are positive or all negative - the point of intersection inside the triangle
+        if (((d1 > 0 && d2 > 0 && d3 > 0) || (d1 < 0 && d2 < 0 && d3 < 0)))
+            return planeIntersection;
+        //The point on the side or on the vertex
+        return null;
     }
 }
