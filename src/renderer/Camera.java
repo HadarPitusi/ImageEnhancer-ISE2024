@@ -93,6 +93,7 @@ public class Camera implements Cloneable{
     }
 
     public Ray constructRay(int nX, int nY, int j, int i) {
+        //588
         Point pC;
         if(isZero(distance))
             pC=p0;
