@@ -50,15 +50,7 @@ public class Sphere extends RadialGeometry {
 
         double t1 = tm - th;
         double t2 = tm + th;
-       /** if (t1 > 0 && t2 > 0 && alignZero(t1 - maxDistance) <= 0 && alignZero(t2 - maxDistance) <= 0)
-            return List.of(ray.getPoint(t1), ray.getPoint(t2));
-        boolean check = alignZero(t2 - maxDistance) <= 0;
-        if (t1 < 0 && alignZero(t1 - maxDistance) <= 0)
-            return List.of(ray.getPoint(t2));
-        if (t2 < 0 && alignZero(t2 - maxDistance) <= 0)
-            return List.of(ray.getPoint(t1));
-        //return check? null: List.of(ray.getPoint(t2));
-        //return check? List.of(ray.getPoint(t1)):  List.of(ray.getPoint(t1),ray.getPoint(t2)); **/
+
          if (t1>0 && t2>0)
              return List.of(ray.getPoint(t1),ray.getPoint(t2));
          if (t2>0)

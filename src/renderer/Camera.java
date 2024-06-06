@@ -4,8 +4,11 @@ import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
 
+
 import java.lang.module.ModuleDescriptor;
 import java.util.MissingResourceException;
+
+import static primitives.Util.isZero;
 
 public class Camera implements Cloneable{
     private Point p0;
@@ -22,13 +25,22 @@ public class Camera implements Cloneable{
         public Builder() {
         }
 
+        public Builder(Camera my_camera){
+           camera.p0=my_camera.p0;
+           camera.vTo=my_camera.vTo;
+           camera.vUp=my_camera.vUp;
+           camera.vRight=my_camera.vRight;
+           camera.height=my_camera.height;
+           camera.width=my_camera.width;
+           camera.distance=my_camera.distance;
+        }
         public Builder setLocation(Point point) {
             camera.p0=point;
             return this;
         }
 
         public Builder setDirection(Vector vTo, Vector vUp){
-            if(vTo.dotProduct(vUp)==0)
+            if(!isZero(vTo.dotProduct(vUp)))
                 throw new IllegalArgumentException("The vectors are not vertical");
             camera.vTo=vTo.normalize();
             camera.vUp=vUp.normalize();
@@ -36,6 +48,10 @@ public class Camera implements Cloneable{
         }
 
         public Builder setVpSize(double width, double height){
+            if (width<=0)
+                throw new IllegalArgumentException("ERROR: width is negative");
+            if (height<=0)
+                throw new IllegalArgumentException("ERROR: height is negative");
             camera.width=width;
             camera.height=height;
             return this;
@@ -55,11 +71,10 @@ public class Camera implements Cloneable{
                 throw new MissingResourceException(missingData1, NameClassOfMissing,"vector To");
             if (camera.vUp==null)
                 throw new MissingResourceException(missingData1, NameClassOfMissing,"vector up");
-            camera.vRight=camera.vTo.crossProduct(camera.vUp);
+            camera.vRight=camera.vTo.crossProduct(camera.vUp).normalize();
 
             return (Camera) camera.clone();
         }
-
     }
 
     private Camera() {
@@ -78,7 +93,23 @@ public class Camera implements Cloneable{
     }
 
     public Ray constructRay(int nX, int nY, int j, int i) {
-        return null;
+        Point pC;
+        if(isZero(distance))
+            pC=p0;
+        else
+            pC= p0.add(vTo.scale(distance));
+        double rY=height/(double) nY;
+        double rX=width/(double)nX;
+        double yI=-(i-((double)nY-1)/2)*rY;
+        double xJ=(j-((double)nX-1)/2)*rX;
+        Point pIJ=pC;
+        if (!isZero(xJ))
+            pIJ=pIJ.add(vRight.scale(xJ));
+        if (!isZero(yI))
+            pIJ=pIJ.add(vUp.scale(yI));
+
+        Vector vIJ= pIJ.subtract(p0);
+        return new Ray(p0,vIJ);
     }
 
 
@@ -86,4 +117,14 @@ public class Camera implements Cloneable{
         return new Builder();
     }
 
+
+    @Override
+    protected Object clone(){
+        try{
+            Camera camera=(Camera) super.clone();
+            return camera;
+        } catch(CloneNotSupportedException e){
+            throw new AssertionError();
+        }
+    }
 }
