@@ -58,7 +58,6 @@ class PointTest {
                 "ERROR: squared distance between points is wrong");
     }
 
-    //לשאול על הדלתא כי יש בעיה עם השורש, הוא לא יזהה טוב
     @Test
     void testDistance() {
         // ============ Equivalence Partitions Tests ==============

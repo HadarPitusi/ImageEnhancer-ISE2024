@@ -152,7 +152,6 @@ class VectorTest {
         assertEquals(new Vector(-1,-1,-1),
                 v1.subtract(v2),
                 "ERROR: Vector - Vector does not work correctly");
-        //מקרה קצה- חיסור וקטור מעצמו מתקבל וקטור האפס
         // =============== Boundary Values Tests ==================
         // TC10: Subtracting a vector from itself
         assertThrows(IllegalArgumentException.class,
