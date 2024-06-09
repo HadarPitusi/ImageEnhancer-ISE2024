@@ -55,21 +55,23 @@ public class Plane implements Geometry {
 
     @Override
     public List<Point> findIntersections(Ray ray) {
-        if (q.equals(ray.getHead()))//נקודת התחלת הקרן ונקודת הייצוג מתלכדות
+        // The starting point of the ray coincides with the representation point
+        if (q.equals(ray.getHead()))
             return null;
-        Vector v = ray.getDirection();
+        Vector directionRay = ray.getDirection();
         Vector q_p0 = q.subtract(ray.getHead());
         double n_qp = normal.dotProduct(q_p0);
-        if (isZero(n_qp))//נקודת התחלת הקרן היא על המישור
+        // The starting point of the ray is on the plane
+        if (isZero(n_qp))
             return null;
-        double nv = normal.dotProduct(v);
-        if (isZero(nv))// מקביל למישור
+        double nv = normal.dotProduct(directionRay);
+        // The ray is parallel to the plane
+        if (isZero(nv))
             return null;
         double t = alignZero(n_qp / nv);
-        if (t <= 0)//מתחיל אחרי המישור
+        // The ray start after the plane
+        if (t <= 0)
             return null;
         return List.of(ray.getPoint(t));
-
-
     }
 }

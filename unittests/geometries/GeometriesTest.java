@@ -36,19 +36,37 @@ class GeometriesTest {
 
         // ============ Equivalence Partitions Tests ==============
         //TC01: Some shapes are intersected, but not all (plane(1), sphere(2))
-        assertEquals(3, geo.findIntersections(ray1).size(), "ERROR: wrong result");
+        assertEquals(
+                3,
+                geo.findIntersections(ray1).size(),
+                "ERROR: wrong result"
+        );
 
         // =============== Boundary Values Tests ==================
         //TC10: Empty collection of geometries.
-        assertNull(emptyGeo.findIntersections(ray1), "Error: the collection is empty");
+        assertNull(
+                emptyGeo.findIntersections(ray1),
+                "Error: the collection is empty"
+        );
 
         //TC11: No shapes are intersected
-        assertNull(geo.findIntersections(new Ray(new Point(6, 1, 1), v1)), "Error: no point should be returned");
+        assertNull(
+                geo.findIntersections(new Ray(new Point(6, 1, 1), v1)),
+                "Error: no point should be returned"
+        );
 
         //TC12: Only one shape is intersected (plane(1))
-        assertEquals(1, geo.findIntersections(new Ray(new Point(6, 1, -1), v1)).size(), "ERROR: wrong result");
+        assertEquals(
+                1,
+                geo.findIntersections(new Ray(new Point(6, 1, -1), v1)).size(),
+                "ERROR: wrong result"
+        );
 
         //TC13: All shapes are intersected
-        assertEquals(4, geo.findIntersections(ray2).size(), "ERROR: wrong result");
+        assertEquals(
+                4,
+                geo.findIntersections(ray2).size(),
+                "ERROR: wrong result"
+        );
     }
 }
