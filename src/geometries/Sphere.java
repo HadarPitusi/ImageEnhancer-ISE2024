@@ -8,7 +8,6 @@ import static primitives.Util.*;
 
 import java.util.List;
 
-import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
 
 //אצל יאיר בסרטון מופיע ש Sphere implements Gieometry
@@ -19,10 +18,10 @@ public class Sphere extends RadialGeometry {
     /**
      * Constructor to initialize Sphere based on radius and center point.
      *
-     * @param radius sphere's radius.
      * @param center center point.
+     * @param radius sphere's radius.
      */
-    public Sphere(double radius, Point center) {
+    public Sphere(Point center, double radius) {
         super(radius);
         this.center = center;
     }
@@ -36,7 +35,8 @@ public class Sphere extends RadialGeometry {
     public List<Point> findIntersections(Ray ray) {
         Point p0 = ray.getHead();
         Vector center_p0;
-        try {//p0 במרכז
+        //p0 in center
+        try {
             center_p0 = (center.subtract(p0));
         } catch (IllegalArgumentException error) {
             return List.of(p0.add(ray.getDirection().scale(radius)));
@@ -53,7 +53,7 @@ public class Sphere extends RadialGeometry {
         double t2 = tm + th;
 
          if (t1>0 && t2>0)
-             return List.of(ray.getPoint(t1),ray.getPoint(t2)).stream().toList();
+             return List.of(ray.getPoint(t1),ray.getPoint(t2));
          if (t2>0)
              return List.of(ray.getPoint(t2));
          if (t1>0)

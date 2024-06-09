@@ -59,8 +59,8 @@ public class Plane implements Geometry {
         if (q.equals(ray.getHead()))
             return null;
         Vector directionRay = ray.getDirection();
-        Vector q_p0 = q.subtract(ray.getHead());
-        double n_qp = normal.dotProduct(q_p0);
+        Vector q_q0= q.subtract(ray.getHead());
+        double n_qp = normal.dotProduct(q_q0);
         // The starting point of the ray is on the plane
         if (isZero(n_qp))
             return null;

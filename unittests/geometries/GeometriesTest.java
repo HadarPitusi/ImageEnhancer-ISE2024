@@ -5,9 +5,6 @@ import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class GeometriesTest {
@@ -31,7 +28,7 @@ class GeometriesTest {
         Geometries geo = new Geometries(
                 new Plane(p1, p2, p3),
                 new Triangle(p4, p5, p6),
-                new Sphere(5, new Point(0, 0, 7))
+                new Sphere(new Point(0, 0, 7), 5)
         );
 
         // ============ Equivalence Partitions Tests ==============

@@ -19,7 +19,7 @@ class SphereTest {
     void testGetNormal() {
         // ============ Equivalence Partitions Tests ==============
         // TC01: There is a simple single test here - using a quad
-        Sphere s = new Sphere(4, new Point(0, 0, 2));
+        Sphere s = new Sphere(new Point(0, 0, 2), 4);
         // Make sure the values of the normal are correct
         assertEquals(v001,
                 s.getNormal(new Point(0, 0, 6)),
@@ -36,7 +36,7 @@ class SphereTest {
      */
     @Test
     public void testFindIntersections() {
-        Sphere sphere = new Sphere(1d, p100);
+        Sphere sphere = new Sphere(p100, 1d);
         final Point p200 = new Point(2, 0, 0);
         final Point p300 = new Point(3, 0, 0);
         final Point p110 = new Point(1, 1, 0);
