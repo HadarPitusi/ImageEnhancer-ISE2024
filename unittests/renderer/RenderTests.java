@@ -46,7 +46,7 @@ public class RenderTests {
    }
 
    /** Test for XML based scene - for bonus */
-/**   @Test
+  /** @Test
    public void basicRenderXml() {
       // enter XML file name and parse from XML file into scene object
       // using the code you added in appropriate packages
@@ -60,5 +60,6 @@ public class RenderTests {
          .printGrid(100, new Color(YELLOW))
          .writeToImage();
    }**/
+
 }
 
