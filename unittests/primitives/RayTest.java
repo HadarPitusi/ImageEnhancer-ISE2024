@@ -9,6 +9,20 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class RayTest {
+    private final double DELTA = 0.000001;
+
+    @Test
+    void testRay() {
+        Point point = new Point(0, 0, 1);
+        Ray ray = new Ray(point, new Vector(2, 4, 0));
+
+        assertEquals(
+                1,
+                ray.getDirection().length(),
+                DELTA,
+                "ERROR: direction vector is not normalize"
+        );
+    }
 
     @Test
     void testGetPoint() {
@@ -16,12 +30,24 @@ class RayTest {
         Ray ray = new Ray(point, new Vector(1, 0, 0));
         // ============ Equivalence Partitions Tests ==============
         //TC01: negative distance from the head
-        assertEquals(new Point(-1, 0, 1), ray.getPoint(-1), "ERROR: wrong result- negative distance");
+        assertEquals(
+                new Point(-1, 0, 1),
+                ray.getPoint(-1),
+                "ERROR: wrong result- negative distance"
+        );
         //TC02: positive distance from the head
-        assertEquals(new Point(2, 0, 1), ray.getPoint(2), "ERROR: wrong result- positive distance");
+        assertEquals(
+                new Point(2, 0, 1),
+                ray.getPoint(2),
+                "ERROR: wrong result- positive distance"
+        );
         // =============== Boundary Values Tests ==================
         //TC10: The head of the ray and the point are same
-        assertEquals(point, ray.getPoint(0), "Error: The head of the ray on the plane");
+        assertEquals(
+                point,
+                ray.getPoint(0),
+                "Error: The head of the ray on the plane"
+        );
     }
 
     @Test
