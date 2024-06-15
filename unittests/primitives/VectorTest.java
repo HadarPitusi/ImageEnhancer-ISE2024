@@ -91,7 +91,7 @@ class VectorTest {
                 "ERROR: Vector + -itself does not throw an exception");
         //TC11: opposite vectors
         assertEquals(new Vector(-2, 0, 2),
-                v1.add(new Vector(-3,-2,-1)),
+                v1.add(new Vector(-3, -2, -1)),
                 "ERROR: Vector + opposite Vector does not work correctly");
     }
 

@@ -7,6 +7,7 @@ import geometries.Triangle;
 import org.junit.jupiter.api.Test;
 import primitives.Point;
 import primitives.Vector;
+import scene.Scene;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -19,6 +20,8 @@ class IntegrationTest {
      * Camera builder with default settings.
      */
     private final Camera.Builder cameraBuilder = Camera.getBuilder()
+            .setRayTracer(new SimpleRayTracer(new Scene("Test")))
+            .setImageWriter(new ImageWriter("Test", 1, 1))
             .setLocation(Point.ZERO)
             .setDirection(new Vector(0, 0, -1), new Vector(0, 1, 0))
             .setVpDistance(1);
@@ -30,6 +33,7 @@ class IntegrationTest {
 
     /**
      * Counts the number of intersections between rays constructed by the camera and the given shape.
+     *
      * @param shape  the geometric shape to intersect with
      * @param camera the camera constructing the rays
      * @return the count of intersection points
