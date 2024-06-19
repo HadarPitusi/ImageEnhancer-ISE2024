@@ -9,6 +9,7 @@ import lighting.AmbientLight;
 import primitives.*;
 import renderer.*;
 import scene.Scene;
+import  renderer.SceneXMLParser;
 
 /** Test rendering a basic image
  * @author Dan */
@@ -45,8 +46,8 @@ public class RenderTests {
          .writeToImage();
    }
 
-   /** Test for XML based scene - for bonus */
-  /** @Test
+   /**Test for XML based scene - for bonus */
+   /**@Test
    public void basicRenderXml() {
       // enter XML file name and parse from XML file into scene object
       // using the code you added in appropriate packages
@@ -59,7 +60,50 @@ public class RenderTests {
          .renderImage()
          .printGrid(100, new Color(YELLOW))
          .writeToImage();
+
+
+      //SceneXMLParser SceneXMLParser;
+      Scene scene = SceneXMLParser.parse("src/main/resources/renderTestTwoColors.xml");
+
+      ImageWriter imageWriter = new ImageWriter("renderTest", 1000, 1000);
+     // Camera camera = new Camera(new Point(0, 0, 0), new Vector(0, 1, 0), new Vector(0, 0, -1));
+      RayTracerBase tracer = new SimpleRayTracer(scene);
+
+      camera.setImageWriter(imageWriter).setRayTracer(tracer)
+                      .build()
+      .renderImage()
+      .printGrid(100, new Color(YELLOW)) // ודא שהמחלקה Color תומכת בערכים אלו
+      .writeToImage();
    }**/
+
+
+   // For stage 6 - please disregard in stage 5
+   /**
+    * Produce a scene with basic 3D model - including individual lights of the
+    * bodies and render it into a png image with a grid
+    */
+   @Test
+   public void renderMultiColorTest() {
+      scene.geometries.add( // center
+              new Sphere(new Point(0, 0, -100), 50),
+              // up left
+              new Triangle(new Point(-100, 0, -100), new Point(0, 100, -100), new Point(-100, 100, -100))
+                      .setEmission(new Color(GREEN)),
+              // down left
+              new Triangle(new Point(-100, 0, -100), new Point(0, -100, -100), new Point(-100, -100, -100))
+                      .setEmission(new Color(255,0,0)),
+              // down right
+              new Triangle(new Point(100, 0, -100), new Point(0, -100, -100), new Point(100, -100, -100))
+                      .setEmission(new Color(BLUE)));
+      scene.setAmbientLight(new AmbientLight(new Color(WHITE), new Double3(0.2, 0.2, 0.2))); //
+
+      camera
+              .setImageWriter(new ImageWriter("color render test", 1000, 1000))
+              .build()
+              .renderImage()
+              .printGrid(100, new Color(WHITE))
+              .writeToImage();
+   }
 
 }
 

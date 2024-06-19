@@ -20,9 +20,9 @@ public class Triangle extends Polygon {
     }
 
     @Override
-    public List<Point> findIntersections(Ray ray) {
+    protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
         //Intersection with the surface in which the triangle is contained
-        List<Point> planeIntersection = plane.findIntersections(ray);
+        List<GeoPoint> planeIntersection = plane.findGeoIntersections(ray);
         if (planeIntersection == null)
             return null;
         Point p0 = ray.getHead();
@@ -41,7 +41,8 @@ public class Triangle extends Polygon {
             return null;
         //All scalar multiples are positive or all negative - the point of intersection inside the triangle
         if (((d1 > 0 && d2 > 0 && d3 > 0) || (d1 < 0 && d2 < 0 && d3 < 0)))
-            return planeIntersection;
+            return List.of(new GeoPoint(this, planeIntersection.get(0).point));
+            //return planeIntersection;
         //The point on the side or on the vertex
         return null;
     }

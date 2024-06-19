@@ -39,16 +39,16 @@ public class Camera implements Cloneable {
         /**
          * Constructor for Builder that copies an existing Camera.
          *
-         * @param my_camera the Camera to copy
+         * @param camera the Camera to copy
          */
-        public Builder(Camera my_camera) {
-            camera.p0 = my_camera.p0;
-            camera.vTo = my_camera.vTo;
-            camera.vUp = my_camera.vUp;
-            camera.vRight = my_camera.vRight;
-            camera.height = my_camera.height;
-            camera.width = my_camera.width;
-            camera.distance = my_camera.distance;
+        public Builder(Camera camera) {
+            this.camera.p0 = camera.p0;
+            this.camera.vTo = camera.vTo;
+            this.camera.vUp = camera.vUp;
+            this.camera.vRight = camera.vRight;
+            this.camera.height = camera.height;
+            this.camera.width = camera.width;
+            this.camera.distance = camera.distance;
         }
 
         /**
@@ -58,7 +58,7 @@ public class Camera implements Cloneable {
          * @return the Builder instance
          */
         public Builder setLocation(Point point) {
-            camera.p0 = point;
+            this.camera.p0 = point;
             return this;
         }
 
@@ -73,8 +73,8 @@ public class Camera implements Cloneable {
         public Builder setDirection(Vector vTo, Vector vUp) {
             if (!isZero(vTo.dotProduct(vUp)))
                 throw new IllegalArgumentException("The vectors are not vertical");
-            camera.vTo = vTo.normalize();
-            camera.vUp = vUp.normalize();
+            this.camera.vTo = vTo.normalize();
+            this.camera.vUp = vUp.normalize();
             return this;
         }
 
@@ -91,8 +91,8 @@ public class Camera implements Cloneable {
                 throw new IllegalArgumentException("ERROR: width is negative");
             if (height <= 0)
                 throw new IllegalArgumentException("ERROR: height is negative");
-            camera.width = width;
-            camera.height = height;
+            this.camera.width = width;
+            this.camera.height = height;
             return this;
         }
 
@@ -103,7 +103,7 @@ public class Camera implements Cloneable {
          * @return the Builder instance
          */
         public Builder setVpDistance(double distance) {
-            camera.distance = distance;
+            this.camera.distance = distance;
             return this;
         }
 
@@ -114,7 +114,7 @@ public class Camera implements Cloneable {
          * @return the Builder instance
          */
         public Builder setRayTracer(RayTracerBase rayTracer) {
-            camera.rayTracer = rayTracer;
+            this.camera.rayTracer = rayTracer;
             return this;
         }
 
@@ -125,7 +125,7 @@ public class Camera implements Cloneable {
          * @return the Builder instance
          */
         public Builder setImageWriter(ImageWriter imageWriter) {
-            camera.imageWriter = imageWriter;
+            this.camera.imageWriter = imageWriter;
             return this;
         }
 
@@ -136,42 +136,42 @@ public class Camera implements Cloneable {
          * @throws MissingResourceException if any required field is missing
          */
         public Camera build() {
-            final String missingData1 = "Missing render data";
+            final String missingData = "Missing render data";
             final String NameClassOfMissing = "camera";
-            if (camera.p0 == null)
+            if (this.camera.p0 == null)
                 throw new MissingResourceException(
-                        missingData1,
+                        missingData,
                         NameClassOfMissing,
                         "the point of distance between the camera"
                 );
-            if (camera.vTo == null)
+            if (this.camera.vTo == null)
                 throw new MissingResourceException(
-                        missingData1,
+                        missingData,
                         NameClassOfMissing,
                         "vector To"
                 );
-            if (camera.vUp == null)
+            if (this.camera.vUp == null)
                 throw new MissingResourceException(
-                        missingData1,
+                        missingData,
                         NameClassOfMissing,
                         "vector up"
                 );
-            if (camera.imageWriter == null)
+            if (this.camera.imageWriter == null)
                 throw new MissingResourceException(
-                        missingData1,
+                        missingData,
                         NameClassOfMissing,
                         "imageWriter"
                 );
-            if (camera.rayTracer == null)
+            if (this.camera.rayTracer == null)
                 throw new MissingResourceException(
-                        missingData1,
+                        missingData,
                         NameClassOfMissing,
                         "rayTracer"
                 );
-            camera.vRight = camera.vTo.crossProduct(camera.vUp).normalize();
+            this.camera.vRight = this.camera.vTo.crossProduct(this.camera.vUp).normalize();
 
             try {
-                return (Camera) camera.clone();
+                return (Camera) this.camera.clone();
             } catch (CloneNotSupportedException e) {
                 throw new RuntimeException(e);
             }
@@ -219,22 +219,22 @@ public class Camera implements Cloneable {
      */
     public Ray constructRay(int nX, int nY, int j, int i) {
         Point pC;
-        if (isZero(distance))
-            pC = p0;
+        if (isZero(this.distance))
+            pC = this.p0;
         else
-            pC = p0.add(vTo.scale(distance));
-        double rY = height / (double) nY;
-        double rX = width / (double) nX;
+            pC = this.p0.add(this.vTo.scale(this.distance));
+        double rY = this.height / (double) nY;
+        double rX = this.width / (double) nX;
         double yI = -(i - ((double) nY - 1) / 2) * rY;
         double xJ = (j - ((double) nX - 1) / 2) * rX;
         Point pIJ = pC;
         if (!isZero(xJ))
-            pIJ = pIJ.add(vRight.scale(xJ));
+            pIJ = pIJ.add(this.vRight.scale(xJ));
         if (!isZero(yI))
-            pIJ = pIJ.add(vUp.scale(yI));
+            pIJ = pIJ.add(this.vUp.scale(yI));
 
-        Vector vIJ = pIJ.subtract(p0);
-        return new Ray(p0, vIJ);
+        Vector vIJ = pIJ.subtract(this.p0);
+        return new Ray(this.p0, vIJ);
     }
 
     /**
@@ -256,7 +256,7 @@ public class Camera implements Cloneable {
      */
     private void castRay(int Nx, int Ny, int column, int row){
         Ray ray=constructRay(column, row, Nx, Ny);
-        imageWriter.writePixel(Nx,Ny, rayTracer.tracerRay(ray));
+        this.imageWriter.writePixel(Nx,Ny, this.rayTracer.tracerRay(ray));
     }
 
 
@@ -265,9 +265,9 @@ public class Camera implements Cloneable {
      * Currently not implemented.
      */
     public Camera renderImage() {
-        for (int i = 0; i < imageWriter.getNx(); i++) {
-            for (int j = 0; j < imageWriter.getNy(); j++) {
-                castRay(i,j, imageWriter.getNx(), imageWriter.getNy());
+        for (int i = 0; i < this.imageWriter.getNx(); i++) {
+            for (int j = 0; j < this.imageWriter.getNy(); j++) {
+                castRay(i,j, this.imageWriter.getNx(), this.imageWriter.getNy());
             }
         }
         return this;
@@ -280,15 +280,15 @@ public class Camera implements Cloneable {
      * @param color    the color of the grid lines
      */
     public Camera printGrid(int interval, Color color) {
-        for (int i = 0; i < imageWriter.getNx(); i += interval) {
-            for (int j = 0; j < imageWriter.getNy(); j++) {
-                imageWriter.writePixel(i, j, color);
+        for (int i = 0; i < this.imageWriter.getNx(); i += interval) {
+            for (int j = 0; j < this.imageWriter.getNy(); j++) {
+                this.imageWriter.writePixel(i, j, color);
             }
         }
 
-        for (int j = 0; j < imageWriter.getNy(); j += interval) {
-            for (int i = 0; i < imageWriter.getNx(); i++) {
-                imageWriter.writePixel(i, j, color);
+        for (int j = 0; j < this.imageWriter.getNy(); j += interval) {
+            for (int i = 0; i < this.imageWriter.getNx(); i++) {
+                this.imageWriter.writePixel(i, j, color);
             }
         }
         return this;

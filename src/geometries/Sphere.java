@@ -32,14 +32,14 @@ public class Sphere extends RadialGeometry {
     }
 
     @Override
-    public List<Point> findIntersections(Ray ray) {
+    protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
         Point p0 = ray.getHead();
         Vector center_p0;
         //p0 in center
         try {
             center_p0 = (center.subtract(p0));
         } catch (IllegalArgumentException error) {
-            return List.of(p0.add(ray.getDirection().scale(radius)));
+            return List.of(new GeoPoint(this, p0.add(ray.getDirection().scale(radius))));
         }
         double tm = alignZero(ray.getDirection().dotProduct(center_p0));
         double d = alignZero(sqrt(center_p0.lengthSquared() - tm * tm));
@@ -53,11 +53,12 @@ public class Sphere extends RadialGeometry {
         double t2 = tm + th;
 
          if (t1>0 && t2>0)
-             return List.of(ray.getPoint(t1),ray.getPoint(t2));
+             return List.of(new GeoPoint(this, ray.getPoint(t1)),
+                     new GeoPoint(this, ray.getPoint(t2)));
          if (t2>0)
-             return List.of(ray.getPoint(t2));
+             return List.of(new GeoPoint(this, ray.getPoint(t2)));
          if (t1>0)
-             return List.of(ray.getPoint(t1));
+             return List.of(new GeoPoint(this, ray.getPoint(t1)));
          return null;
     }
 }
