@@ -4,47 +4,41 @@ import primitives.Color;
 import primitives.Double3;
 
 /**
- * Class representing ambient light in a scene.
+ * Represents ambient light in a scene.
+ * Ambient light is a light that is scattered in all directions and comes from all directions equally.
+ * It has a constant intensity throughout the scene.
+ *
+ * <p>This class extends the abstract class {@link Light}.</p>
+ *
+ * @see Light
  */
-public class AmbientLight {
-
-    /**
-     * The intensity of the ambient light.
-     */
-    private final Color intensity;
+public class AmbientLight extends Light {
 
     /**
      * A constant representing no ambient light.
+     * This can be used to denote the absence of ambient light in a scene.
      */
     public static final AmbientLight NONE = new AmbientLight(new Color(java.awt.Color.BLACK), Double3.ZERO);
 
     /**
-     * Constructs an ambient light with the given color intensity and attenuation factor.
+     * Constructs an ambient light with the specified intensity and scaling factor.
      *
-     * @param intensity the color intensity of the ambient light.
-     * @param kA the attenuation factor as a {@code Double3}.
+     * @param intensity the color intensity of the ambient light
+     * @param kA the scaling factor for the intensity
      */
     public AmbientLight(Color intensity, Double3 kA) {
-        this.intensity = intensity.scale(kA);
+        super(intensity.scale(kA));
     }
 
     /**
-     * Constructs an ambient light with the given color intensity and attenuation factor.
+     * Constructs an ambient light with the specified intensity and scaling factor.
      *
-     * @param intensity the color intensity of the ambient light.
-     * @param kA the attenuation factor as a {@code double}.
+     * @param intensity the color intensity of the ambient light
+     * @param kA the scaling factor for the intensity
      */
     public AmbientLight(Color intensity, double kA) {
-        this.intensity = intensity.scale(kA);
-    }
-
-    /**
-     * Returns the intensity of the ambient light.
-     *
-     * @return the color intensity of the ambient light.
-     */
-    public Color getIntensity() {
-        return intensity;
+        super(intensity.scale(kA));
     }
 }
+
 
