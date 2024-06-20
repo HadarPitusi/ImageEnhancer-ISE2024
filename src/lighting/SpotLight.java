@@ -5,6 +5,7 @@ import primitives.Point;
 import primitives.Vector;
 
 import static java.lang.Math.max;
+import static java.lang.Math.pow;
 
 /**
  * Represents a spot light source in a scene.
@@ -18,6 +19,7 @@ import static java.lang.Math.max;
 public class SpotLight extends PointLight {
 
     private Vector direction;
+    private double narrowness = 1;
 
     /**
      * Constructs a spot light with the specified intensity, position, and direction.
@@ -33,7 +35,7 @@ public class SpotLight extends PointLight {
 
     @Override
     public Color getIntensity(Point point) {
-        return super.getIntensity(point).scale(max(0, direction.dotProduct(super.getL(point))));
+        return super.getIntensity(point).scale(pow(max(0, direction.dotProduct(super.getL(point))),narrowness));
     }
 
     //לבדוק אם צריך. עשינו רק סופר אז למה לדרוס?
@@ -57,6 +59,11 @@ public class SpotLight extends PointLight {
     @Override
     public SpotLight setKq(double Kq) {
         super.setKq(Kq);
+        return this;
+    }
+
+    public SpotLight setNarrowBeam(double narrowness) {
+        this.narrowness = narrowness;
         return this;
     }
 }
