@@ -247,16 +247,17 @@ public class Camera implements Cloneable {
     }
 
     /**
-     * Casts a ray through a specific pixel and writes the color to the image.
+     * Casts a ray through a specific pixel on the image grid, traces its color, and writes the result to the image.
      *
-     * @param Nx     the number of horizontal pixels
-     * @param Ny     the number of vertical pixels
-     * @param column the column index of the pixel
-     * @param row    the row index of the pixel
+     * @param Nx     the number of columns in the image grid
+     * @param Ny     the number of rows in the image grid
+     * @param column the column index of the pixel through which the ray is cast
+     * @param row    the row index of the pixel through which the ray is cast
      */
-    private void castRay(int Nx, int Ny, int column, int row){
-        Ray ray=constructRay(column, row, Nx, Ny);
-        this.imageWriter.writePixel(Nx,Ny, this.rayTracer.tracerRay(ray));
+    private void castRay(int Nx, int Ny, int column, int row) {
+        Ray ray = constructRay(column, row, Nx, Ny);
+        Color color = this.rayTracer.tracerRay(ray);
+        this.imageWriter.writePixel(Nx, Ny, color);
     }
 
 
@@ -267,7 +268,7 @@ public class Camera implements Cloneable {
     public Camera renderImage() {
         for (int i = 0; i < this.imageWriter.getNx(); i++) {
             for (int j = 0; j < this.imageWriter.getNy(); j++) {
-                castRay(i,j, this.imageWriter.getNx(), this.imageWriter.getNy());
+                castRay(i, j, this.imageWriter.getNx(), this.imageWriter.getNy());
             }
         }
         return this;
