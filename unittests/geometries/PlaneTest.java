@@ -4,9 +4,11 @@ import org.junit.jupiter.api.Test;
 import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
+import geometries.Intersectable.GeoPoint;
 
 import java.util.List;
 
+import static java.lang.Math.sqrt;
 import static org.junit.jupiter.api.Assertions.*;
 
 class PlaneTest {
@@ -155,5 +157,42 @@ class PlaneTest {
                 plane.findIntersections(new Ray(new Point(1, 2, 0), new Vector(-2, 7, 1))),
                 wrongNum
         );
+    }
+
+    /**
+     * Tests the {@code findGeoIntersections} method of the {@code Plane} class.
+     */
+    @Test
+    public void testFindGeoIntersections() {
+        Plane plane = new Plane(
+                new Point(1, 0, 0),
+                new Point(1, 2, 0),
+                new Point(0, 1, 0)
+        );
+
+        // ============ Equivalence Partitions Tests ==============
+        // TC01: A cutting ray, neither oblique nor perpendicular
+        final var result1 = plane.
+                findGeoIntersections(new Ray(new Point(0, 0, -2), new Vector(0, 3, 2)), 4)
+                .stream().toList();
+        assertEquals(1, result1.size(), "Wrong number of points");
+        assertEquals(List.of(new GeoPoint(plane, new Point(0, 3, 0))), result1, "wrong point found");
+
+        //TC02: The point is far away from the head of ray.
+        assertNull(
+                plane.
+                        findGeoIntersections(new Ray(new Point(0, 0, -2), new Vector(0, 3, 2)),
+                                0.5),
+                "max distance"
+        );
+
+        // =============== Boundary Values Tests ==================
+        //TC10: maxDistance == distance between point and head of the ray
+        final var result2 = plane.
+                findGeoIntersections(new Ray(new Point(0, 0, -2), new Vector(0, 3, 2)), sqrt(13))
+                .stream().toList();
+        assertEquals(1, result2.size(), "Wrong number of points");
+        assertEquals(List.of(new GeoPoint(plane, new Point(0, 3, 0))), result2, "wrong point found");
+
     }
 }

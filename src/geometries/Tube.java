@@ -10,11 +10,14 @@ import static primitives.Util.isZero;
 
 public class Tube extends RadialGeometry {
 
-    /** Radius of the main axis of the cylinder. */
+    /**
+     * Radius of the main axis of the cylinder.
+     */
     protected final Ray axis;
 
     /**
      * Constructor to initialize Tube based on radius and ray of the main axis.
+     *
      * @param radius base's radius.
      * @param axis   main axis's Ray.
      */
@@ -25,15 +28,15 @@ public class Tube extends RadialGeometry {
 
     @Override
     public Vector getNormal(Point point) {
-        double t=point.subtract(axis.getHead()).dotProduct(axis.getDirection());
-        if(isZero(t))
+        double t = point.subtract(axis.getHead()).dotProduct(axis.getDirection());
+        if (isZero(t))
             throw new IllegalArgumentException("ERROR: the vector is perpendicular to the ray");
-        Point projection=axis.getPoint(t);
+        Point projection = axis.getPoint(t);
         return point.subtract(projection).normalize();
     }
 
     @Override
-    protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
+    protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray, double maxDistance) {
         return null;
     }
 }

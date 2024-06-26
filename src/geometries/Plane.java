@@ -54,12 +54,12 @@ public class Plane extends Geometry {
     }
 
     @Override
-    protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
+    protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray, double maxDistance) {
         // The starting point of the ray coincides with the representation point
         if (q.equals(ray.getHead()))
             return null;
         Vector directionRay = ray.getDirection();
-        Vector q_q0= q.subtract(ray.getHead());
+        Vector q_q0 = q.subtract(ray.getHead());
         double n_qp = normal.dotProduct(q_q0);
         // The starting point of the ray is on the plane
         if (isZero(n_qp))
@@ -69,9 +69,10 @@ public class Plane extends Geometry {
         if (isZero(nv))
             return null;
         double t = alignZero(n_qp / nv);
-        // The ray start after the plane
-        if (t <= 0)
+        // The ray start after the plane or far away
+        if ((t <= 0) || alignZero(t - maxDistance) > 0)
             return null;
+
         return List.of(new GeoPoint(this, ray.getPoint(t)));
     }
 }

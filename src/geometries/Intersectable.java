@@ -1,6 +1,7 @@
 package geometries;
 
 import primitives.*;
+
 import java.util.*;
 
 
@@ -9,19 +10,21 @@ import java.util.*;
  */
 public abstract class Intersectable {
 
-    /**
-     * Helper method to find the intersection points with a given ray.
-     *
-     * @param ray the ray to intersect with.
-     * @return a list of intersection points as {@code GeoPoint} objects.
-     */
-    protected abstract List<GeoPoint> findGeoIntersectionsHelper(Ray ray);
 
     /**
-     * Finds the intersection points with a given ray.
+     * Finds intersections between the given ray and geometries within the scene, up to a maximum distance.
      *
-     * @param ray the ray to intersect with.
-     * @return a list of intersection points as {@code Point} objects, or {@code null} if there are no intersections.
+     * @param ray         the ray to check for intersections
+     * @param maxDistance the maximum distance to check for intersections
+     * @return a list of GeoPoint objects representing the intersection points, or null if no intersections are found
+     */
+    protected abstract List<GeoPoint> findGeoIntersectionsHelper(Ray ray, double maxDistance);
+
+    /**
+     * Finds intersections between the given ray and geometries within the scene.
+     *
+     * @param ray the ray to check for intersections
+     * @return a list of Points representing the intersection points, or null if no intersections are found
      */
     public List<Point> findIntersections(Ray ray) {
         List<GeoPoint> geoList = findGeoIntersections(ray);
@@ -29,14 +32,26 @@ public abstract class Intersectable {
     }
 
     /**
-     * Finds the intersection points with a given ray.
+     * Finds intersections between the given ray and geometries within the scene.
      *
-     * @param ray the ray to intersect with.
-     * @return a list of intersection points as {@code GeoPoint} objects, or {@code null} if there are no intersections.
+     * @param ray the ray to check for intersections
+     * @return a list of GeoPoint objects representing the intersection points, or null if no intersections are found
      */
-    public List<GeoPoint> findGeoIntersections(Ray ray) {
-        return findGeoIntersectionsHelper(ray);
+    public final List<GeoPoint> findGeoIntersections(Ray ray) {
+        return findGeoIntersections(ray, Double.POSITIVE_INFINITY);
     }
+
+    /**
+     * Finds intersections between the given ray and geometries within the scene, up to a maximum distance.
+     *
+     * @param ray         the ray to check for intersections
+     * @param maxDistance the maximum distance to check for intersections
+     * @return a list of GeoPoint objects representing the intersection points, or null if no intersections are found
+     */
+    public final List<GeoPoint> findGeoIntersections(Ray ray, double maxDistance) {
+        return findGeoIntersectionsHelper(ray, maxDistance);
+    }
+
 
     /**
      * Class representing a point of intersection between a ray and a geometry.
@@ -56,7 +71,7 @@ public abstract class Intersectable {
          * Constructs a {@code GeoPoint} with the given geometry and point.
          *
          * @param geometry the geometry that was intersected.
-         * @param point the point of intersection.
+         * @param point    the point of intersection.
          */
         public GeoPoint(Geometry geometry, Point point) {
             this.geometry = geometry;
@@ -72,7 +87,7 @@ public abstract class Intersectable {
 
         @Override
         public String toString() {
-            return "(" + geometry +','+ point + ')';
+            return "(" + geometry + ',' + point + ')';
         }
     }
 }

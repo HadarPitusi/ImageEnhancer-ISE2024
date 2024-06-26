@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
+import geometries.Intersectable.GeoPoint;
 
 import java.util.List;
 
@@ -57,7 +58,7 @@ class TriangleTest {
 
     /**
      * Tests the {@code findIntersections} method of the {@code Triangle} class.
-     * */
+     */
     @Test
     public void testFindIntersections() {
         // ============ Equivalence Partitions Tests ==============
@@ -101,6 +102,47 @@ class TriangleTest {
         assertNull(
                 triangle.findIntersections(new Ray(new Point(4, 0, -1), new Vector(0, 0, 1))),
                 "Ray's line on the continuation of a side"
+        );
+    }
+
+    /**
+     * Tests the {@code findGeoIntersections} method of the {@code Triangle} class.
+     */
+    @Test
+    public void testFindGeoIntersections() {
+        Triangle triangle = new Triangle(
+                new Point(3, 0, 0),
+                new Point(-3, 0, 0),
+                new Point(0, 3, 0)
+        );
+
+        // ============ Equivalence Partitions Tests ==============
+        // TC01: The ray intersects with the triangle.
+        final var result1 = triangle.
+                findGeoIntersections(new Ray(new Point(0, 1, -1), new Vector(0, 0, 1)), 10)
+                .stream().toList();
+        assertEquals(1, result1.size(), "Wrong number of points -geoIntersection");
+        assertEquals(List.of(
+                        new GeoPoint(triangle, new Point(0, 1, 0))),
+                result1,
+                "Ray crosses triangle -geoIntersection"
+        );
+        //TC02: The point is far away from the head of ray.
+        assertNull(
+                triangle.findGeoIntersections(new Ray(new Point(0, 1, -1), new Vector(0, 0, 1)),
+                        0.5),
+                "max Distance"
+        );
+        // =============== Boundary Values Tests ==================
+        //TC10: maxDistance == distance between point and head of the ray
+        final var result2 = triangle.
+                findGeoIntersections(new Ray(new Point(0, 1, -1), new Vector(0, 0, 1)), 1)
+                .stream().toList();
+        assertEquals(1, result2.size(), "Wrong number of points -geoIntersection");
+        assertEquals(List.of(
+                        new GeoPoint(triangle, new Point(0, 1, 0))),
+                result2,
+                "Ray crosses triangle -geoIntersection"
         );
     }
 }

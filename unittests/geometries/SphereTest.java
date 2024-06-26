@@ -118,4 +118,17 @@ class SphereTest {
         // TC22: Ray's line is outside, ray is orthogonal to ray start to sphere's center line
         assertNull(sphere.findIntersections(new Ray(p01, v0)), "Ray's line is orthogonal to the sphere");
     }
+
+    @Test
+    public void testFindGeoIntersections() {
+        Sphere sphere = new Sphere(p100, 1d);
+        // ============ Equivalence Partitions Tests ==============
+        // TC01: Ray starts before and crosses the sphere (2 points)
+        final var result1 = sphere.findGeoIntersections(new Ray(p01, v310))
+                .stream().sorted(Comparator.comparingDouble(p -> p.distance(p01))).toList();
+        assertEquals(2, result1.size(), "Wrong number of points");
+        assertEquals(exp, result1, "Ray crosses sphere");
+
+
+    }
 }
