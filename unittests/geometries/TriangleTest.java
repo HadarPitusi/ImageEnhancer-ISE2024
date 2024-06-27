@@ -134,7 +134,7 @@ class TriangleTest {
                 "max Distance"
         );
         // =============== Boundary Values Tests ==================
-        //TC10: maxDistance == distance between point and head of the ray
+        //TC11: maxDistance == distance between point and head of the ray
         final var result2 = triangle.
                 findGeoIntersections(new Ray(new Point(0, 1, -1), new Vector(0, 0, 1)), 1)
                 .stream().toList();
