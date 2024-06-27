@@ -17,6 +17,9 @@ public class Material {
      */
     public Double3 Kd = Double3.ZERO;
 
+    public Double3 Kt= Double3.ZERO;
+
+    public Double3 Kr= Double3.ZERO;
     /**
      * The shininess level of the material.
      */
@@ -63,6 +66,26 @@ public class Material {
      */
     public Material setKd(double Kd) {
         this.Kd = new Double3(Kd);
+        return this;
+    }
+
+    public Material setKt(Double3 Kt) {
+        this.Kt = Kt;
+        return this;
+    }
+
+    public Material setKt(double Kt) {
+        this.Kt = new Double3(Kt);
+        return this;
+    }
+
+    public Material setKr(Double3 Kr) {
+        this.Kr = Kr;
+        return this;
+    }
+
+    public Material setKr(double Kr) {
+        this.Kr = new Double3(Kr);
         return this;
     }
 
