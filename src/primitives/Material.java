@@ -69,6 +69,17 @@ public class Material {
         return this;
     }
 
+    /**
+     * Sets the shininess level of the material.
+     *
+     * @param Shininess the shininess level
+     * @return the current instance of {@code Material}
+     */
+    public Material setShininess(int Shininess) {
+        this.Shininess = Shininess;
+        return this;
+    }
+
     public Material setKt(Double3 Kt) {
         this.Kt = Kt;
         return this;
@@ -86,17 +97,6 @@ public class Material {
 
     public Material setKr(double Kr) {
         this.Kr = new Double3(Kr);
-        return this;
-    }
-
-    /**
-     * Sets the shininess level of the material.
-     *
-     * @param Shininess the shininess level
-     * @return the current instance of {@code Material}
-     */
-    public Material setShininess(int Shininess) {
-        this.Shininess = Shininess;
         return this;
     }
 }

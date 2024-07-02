@@ -210,7 +210,7 @@ public class LightsTests {
         //  .setKl(1).setKq(0.1));
         scene1.lights.add(new DirectionalLight(sphereLightColor3, sphereLightDirection2));
 
-        camera1.setImageWriter(new ImageWriter("ourTest", 500, 500))
+        camera1.setImageWriter(new ImageWriter("mySphere", 500, 500))
                 .build()
                 .renderImage()
                 .writeToImage();

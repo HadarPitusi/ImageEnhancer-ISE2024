@@ -2,10 +2,14 @@ package primitives;
 
 import java.util.List;
 import java.util.Objects;
+
 import geometries.Intersectable.GeoPoint;
+
 import static primitives.Util.isZero;
 
 public class Ray {
+
+    private static final double DELTA = 0.1;
 
     private final Point head;
     private final Vector direction;
@@ -18,6 +22,21 @@ public class Ray {
      */
     public Ray(Point head, Vector direction) {
         this.head = head;
+        this.direction = direction.normalize();
+    }
+
+    /**
+     * Constructs a new Ray.
+     *
+     * @param head      the origin point of the ray
+     * @param direction the direction vector of the ray
+     * @param normal    the normal vector used to adjust the origin point
+     */
+    public Ray(Point head, Vector direction, Vector normal) {
+        //Checking the direction and size of the displacement on top of the normal
+        double direction_normal = direction.dotProduct(normal);
+        this.head = isZero(direction_normal) ? head :
+                direction_normal > 0 ? head.add(normal.scale(DELTA)) : head.add(normal.scale(-DELTA));
         this.direction = direction.normalize();
     }
 
@@ -66,22 +85,22 @@ public class Ray {
     /**
      * Finds the closest GeoPoint from the list to the head of this object.
      *
-     * @param listPoints a list of GeoPoint objects to search from.
+     * @param geoPointList a list of GeoPoint objects to search from.
      * @return the closest GeoPoint to the head, or null if the list is empty.
      */
-    public GeoPoint findClosestGeoPoint(List<GeoPoint> listPoints) {
-        if (listPoints.isEmpty())
+    public GeoPoint findClosestGeoPoint(List<GeoPoint> geoPointList) {
+        if (geoPointList == null)
             return null;
 
-        GeoPoint closestPoint = listPoints.getFirst();
+        GeoPoint closestPoint = geoPointList.getFirst();
         double minDistance = closestPoint.point.distanceSquared(this.head);
         double distance = 0;
 
-        for (int i = 1; i < listPoints.size(); i++) {
-            distance = listPoints.get(i).point.distanceSquared(this.head);
+        for (int i = 1; i < geoPointList.size(); i++) {
+            distance = geoPointList.get(i).point.distanceSquared(this.head);
             if (minDistance > distance) {
                 minDistance = distance;
-                closestPoint = listPoints.get(i);
+                closestPoint = geoPointList.get(i);
             }
         }
         return closestPoint;
@@ -90,12 +109,12 @@ public class Ray {
     /**
      * Finds the closest Point from the list to the head of this object.
      *
-     * @param points a list of Point objects to search from.
+     * @param pointList a list of Point objects to search from.
      * @return the closest Point to the head, or null if the list is null or empty.
      */
-    public Point findClosestPoint(List<Point> points) {
-        return points == null || points.isEmpty() ? null
-                : findClosestGeoPoint(points.stream().map(p -> new GeoPoint(null, p)).toList()).point;
+    public Point findClosestPoint(List<Point> pointList) {
+        return pointList == null || pointList.isEmpty() ? null
+                : findClosestGeoPoint(pointList.stream().map(p -> new GeoPoint(null, p)).toList()).point;
     }
 
 }
