@@ -41,7 +41,7 @@ public class Geometries extends Intersectable {
     protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray, double maxDistance) {
         List<GeoPoint> intersections = new LinkedList<>();
         for (Intersectable geometry : geometries) {
-            List<GeoPoint> tempIntersections = geometry.findGeoIntersectionsHelper(ray, maxDistance);
+            List<GeoPoint> tempIntersections = geometry.findGeoIntersections(ray, maxDistance);
             if (tempIntersections != null) {
                 intersections.addAll(tempIntersections);
             }

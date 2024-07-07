@@ -80,23 +80,48 @@ public class Material {
         return this;
     }
 
+    /**
+     * Sets the transparency coefficient using a Double3 object.
+     *
+     * @param Kt the transparency coefficient as a Double3 object
+     * @return the current instance of the Material class
+     */
     public Material setKt(Double3 Kt) {
         this.Kt = Kt;
         return this;
     }
 
+    /**
+     * Sets the transparency coefficient using a double value.
+     *
+     * @param Kt the transparency coefficient as a double value
+     * @return the current instance of the Material class
+     */
     public Material setKt(double Kt) {
         this.Kt = new Double3(Kt);
         return this;
     }
 
+    /**
+     * Sets the reflection coefficient using a Double3 object.
+     *
+     * @param Kr the reflection coefficient as a Double3 object
+     * @return the current instance of the Material class
+     */
     public Material setKr(Double3 Kr) {
         this.Kr = Kr;
         return this;
     }
 
+    /**
+     * Sets the reflection coefficient using a double value.
+     *
+     * @param Kr the reflection coefficient as a double value
+     * @return the current instance of the Material class
+     */
     public Material setKr(double Kr) {
         this.Kr = new Double3(Kr);
         return this;
     }
+
 }

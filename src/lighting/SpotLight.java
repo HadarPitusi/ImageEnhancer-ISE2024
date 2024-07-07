@@ -33,15 +33,16 @@ public class SpotLight extends PointLight {
         this.direction = direction.normalize(); // Ensure direction is normalized
     }
 
+    /**
+     * Increases the intensity of the light according to the narrowness of the beam.
+     *
+     * @param point the point in the scene where the light intensity is calculated
+     * @return the color intensity of the light at the given point
+     */
     @Override
     public Color getIntensity(Point point) {
-        return super.getIntensity(point).scale(pow(max(0, direction.dotProduct(super.getL(point))),narrowness));
-    }
-
-    //לבדוק אם צריך. עשינו רק סופר אז למה לדרוס?
-    @Override
-    public Vector getL(Point point) {
-        return super.getL(point);
+        double projection = direction.dotProduct(super.getL(point));
+        return super.getIntensity(point).scale(pow(max(0, projection), narrowness));
     }
 
     @Override
@@ -62,6 +63,12 @@ public class SpotLight extends PointLight {
         return this;
     }
 
+    /**
+     * Sets the narrowness of the light beam.
+     *
+     * @param narrowness the narrowness value
+     * @return the current SpotLight instance (for method chaining)
+     */
     public SpotLight setNarrowBeam(double narrowness) {
         this.narrowness = narrowness;
         return this;

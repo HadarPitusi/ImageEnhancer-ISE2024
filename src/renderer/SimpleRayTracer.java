@@ -145,8 +145,8 @@ public class SimpleRayTracer extends RayTracerBase {
         Double3 kkx = k.product(kx);
         if (kkx.lowerThan(MIN_CALC_COLOR_K)) return Color.BLACK;
 
-        GeoPoint gp = findClosestIntersection(ray);
-        return gp == null ? scene.background : calcColor(gp, ray, level - 1, kkx).scale(kx);
+        GeoPoint geoPoint = findClosestIntersection(ray);
+        return geoPoint == null ? scene.background : calcColor(geoPoint, ray, level - 1, kkx).scale(kx);
     }
 
     /**
