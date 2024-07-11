@@ -29,7 +29,7 @@ public class BonusStage7Test {
         scene.setAmbientLight(new AmbientLight(new Color(20, 150, 240), new Double3(0.1)));
 
         scene.geometries.add(
-                /**------BIRD-------**/
+                /**-------BIRD-------**/
                 //head
                 new Sphere(new Point(-14, 0, 2), 10)
                         .setEmission(new Color(207, 37, 203)).setMaterial(mateBirdSkin.setKt(0.005)),
