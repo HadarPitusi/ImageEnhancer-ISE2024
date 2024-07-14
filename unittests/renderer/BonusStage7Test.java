@@ -26,7 +26,7 @@ public class BonusStage7Test {
         Material mateBirdOrgans = new Material().setKd(0.7).setShininess(10);
         Material mateBirdBeak = new Material().setKr(0.001).setKs(0.2).setKd(0.5);
         Material mateEye = new Material().setKt(1).setKs(0.5).setKd(0.01);
-        scene.setAmbientLight(new AmbientLight(new Color(20, 150, 240), new Double3(0.1)));
+        scene.setAmbientLight(new AmbientLight(new Color(java.awt.Color.YELLOW), new Double3(0.1)));
 
         scene.geometries.add(
                 /**-------BIRD-------**/
@@ -39,12 +39,8 @@ public class BonusStage7Test {
                 //eyes
                 new Sphere(new Point(-20, -8, 4.5), 1)
                         .setEmission(new Color(0, 0, 0)),
-                new Sphere(new Point(-20, -6, 4.5), 2)
-                        .setEmission(new Color(255, 255, 220)).setMaterial(mateEye),
                 new Sphere(new Point(-19, 8, 4.5), 1)
                         .setEmission(new Color(0, 0, 0)),
-                new Sphere(new Point(-20, 6, 4.5), 2)
-                        .setEmission(new Color(255, 255, 220)).setMaterial(mateEye),
                 //beak
                 new Triangle(new Point(-20, -4, 0), new Point(-17, -2, -5.5), new Point(-29, 5, -12))
                         .setEmission(new Color(130, 50, 10)).setMaterial(mateBirdBeak),
@@ -67,7 +63,7 @@ public class BonusStage7Test {
                 /**------LAND-----**/
                 //water
                 new Plane(new Point(-8, -13, -25), new Point(-8, 13, -25), new Point(1, 1, -25))
-                        .setEmission(new Color(0, 10, 230)).setMaterial(new Material().setKd(0.6).setShininess(5)),
+                        .setEmission(new Color(0, 10, 230)).setMaterial(new Material().setKd(0.6).setShininess(6)),
                 new Plane(new Point(-20, -30, -15), new Point(-20, 30, -15), new Point(-10, 0, -15))
                         .setEmission(new Color(0, 0, 255)).setMaterial(new Material().setKr(0.5).setKt(0.5))
         );
