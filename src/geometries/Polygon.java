@@ -102,14 +102,14 @@ public class Polygon extends Geometry {
         if (points == null)
             return null;
 
-        boolean pointInPolygon = pointInPolygon(ray);
-        if (!pointInPolygon)
-            return null;
+     //   boolean pointInPolygon = pointInPolygon(ray);
+      //  if (!pointInPolygon)
+      //      return null;
         points.getFirst().geometry = this;
         return points;
     }
 
-    public boolean pointInPolygon(Ray ray) {
+   /** public boolean pointInPolygon(Ray ray) {
         Point p0 = ray.getHead();
         Vector v = ray.getDirection();
         List<Vector> vectors = new LinkedList<>();
@@ -130,5 +130,5 @@ public class Polygon extends Geometry {
                 return false;
         }
         return true;
-    }
+    }**/
 }

@@ -6,6 +6,8 @@ import primitives.Ray;
 import primitives.Vector;
 import scene.Scene;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.MissingResourceException;
 
 import static primitives.Util.isZero;
@@ -23,6 +25,8 @@ public class Camera implements Cloneable {
     private double distance = 0.0;
     private ImageWriter imageWriter;
     private RayTracerBase rayTracer;
+    private int numOfRays = 1;
+
 
     /**
      * Builder class for constructing Camera instances.
@@ -49,6 +53,7 @@ public class Camera implements Cloneable {
             this.camera.height = camera.height;
             this.camera.width = camera.width;
             this.camera.distance = camera.distance;
+            this.camera.numOfRays=camera.numOfRays;
         }
 
         /**
@@ -129,6 +134,11 @@ public class Camera implements Cloneable {
             return this;
         }
 
+        public Builder setNumOfRays(int numOfRays) {
+            this.camera.numOfRays = numOfRays;
+            return this;
+        }
+
         /**
          * Builds and returns the Camera instance.
          *
@@ -180,6 +190,7 @@ public class Camera implements Cloneable {
 
     private Camera() {
     }
+
 
     /**
      * Gets the height of the view plane.
@@ -249,30 +260,94 @@ public class Camera implements Cloneable {
     /**
      * Casts a ray through a specific pixel on the image grid, traces its color, and writes the result to the image.
      *
-     * @param Nx     the number of columns in the image grid
-     * @param Ny     the number of rows in the image grid
+     * @param nx     the number of columns in the image grid
+     * @param ny     the number of rows in the image grid
      * @param column the column index of the pixel through which the ray is cast
      * @param row    the row index of the pixel through which the ray is cast
      */
-    private void castRay(int Nx, int Ny, int column, int row) {
-        Ray ray = constructRay(column, row, Nx, Ny);
+    private void castRay(int nx, int ny, int column, int row) {
+        Ray ray = constructRay(nx, ny, column, row);
         Color color = this.rayTracer.tracerRay(ray);
-        this.imageWriter.writePixel(Nx, Ny, color);
+        this.imageWriter.writePixel(column, row, color);
     }
 
 
     /**
      * Renders the image.
-     * Currently not implemented.
      */
     public Camera renderImage() {
-        for (int i = 0; i < this.imageWriter.getNx(); i++) {
-            for (int j = 0; j < this.imageWriter.getNy(); j++) {
-                castRay(i, j, this.imageWriter.getNx(), this.imageWriter.getNy());
+        int nx = imageWriter.getNx();
+        int ny = imageWriter.getNy();
+
+        if (numOfRays == 1) {
+            for (int i = 0; i < nx; i++) {
+                for (int j = 0; j < ny; j++) {
+                    castRay(nx, ny, i, j);
+                }
             }
-        }
+        } /**else {
+            for (int i = 0; i < nx; i++) {
+              for (int j = 0; j < ny; j++) {
+              Color color = this.castRayBeam(nx, ny, i, j);
+              this.imageWriter.writePixel(nx, j, color);
+              }
+            }
+         }**/
+
         return this;
     }
+
+    /**private Color castRayBeam(int nx, int ny, int i, int j) {
+        Ray centerRay=this.constructRay(nx,ny,x,y);
+        Color centerColor = this.rayTracer.tracerRay(centerRay);
+        List<Ray> rayBeam = constructRayBeam(centerRay, 4,distance,
+                this.width/nx,this.height/ny);
+
+        Color average = new Color(0, 0, 0);
+        //calc the average
+        for (var ray : rayBeam) {
+            Color c = this.rayTracer.tracerRay(ray);
+            average = average.add(this.rayTracer.tracerRay(ray));
+        }
+
+
+        //else continue with calculate
+        rayBeam = constructRayBeam(centerRay, numOfRays - 4,distance,
+                this.width/nx,this.height/ny);
+
+        for (var ray : rayBeam) {
+            Color c = this.rayTracer.tracerRay(ray);
+            average = average.add(this.rayTracer.tracerRay(ray));
+        }
+
+        return average.reduce(numOfRays);
+
+    }**/
+
+    /**public static List<Ray> constructRayBeam(Ray ray,int numberOfRays, double distance, double pixelWidth, double pixelHeight ) {
+        ArrayList<Ray> resultList = new ArrayList<Ray>();
+
+        //find the X,Y
+        Vector rotatedVector, vUp = ray.getDirection().findOrthogonal(),
+                vRight = vUp.crossProduct(ray.getDirection()).normalize();
+        Point point, targetAreaCenter = ray.getPoint(distance);//move the point to the target area
+        resultList.add(ray);
+        if (numberOfRays == 0)
+            return resultList;
+        double randomWidth, randomHeight; //randomise points on circle
+        for (int i = 1; i < numberOfRays; i++) {
+            randomWidth = random(-pixelWidth /2, pixelWidth /2);
+            randomHeight = random(-pixelHeight/2, pixelHeight/2);
+            rotatedVector = vUp.rotate(vRight, randomHeight);
+            point = targetAreaCenter;
+            if (!isZero(randomWidth))
+                point = point.add(vRight.scale(randomWidth));
+            if (!isZero(randomHeight))
+                point = point.add(vUp.scale(randomHeight));
+            resultList.add(new Ray(ray.getHead(), point.subtract(ray.getHead())));
+        }
+        return resultList;
+    }**/
 
     /**
      * Prints a grid on the image with the specified interval and color.
@@ -301,6 +376,7 @@ public class Camera implements Cloneable {
     public void writeToImage() {
         this.imageWriter.writeToImage();
     }
+
 
 }
 
