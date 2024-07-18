@@ -1,8 +1,15 @@
 package lighting;
 
+import geometries.Plane;
 import primitives.Color;
 import primitives.Point;
 import primitives.Vector;
+
+import java.util.LinkedList;
+import java.util.List;
+
+import static primitives.Util.random;
+
 
 /**
  * Represents a point light source in a scene.
@@ -34,6 +41,16 @@ public class PointLight extends Light implements LightSource {
      * The quadratic attenuation factor.
      */
     private double kQ = 0;
+    public static int softShadowsRays;
+    private int lengthOfTheSide;
+
+
+    public PointLight setLengthOfTheSide(int lengthOfTheSide) {
+        if (lengthOfTheSide < 0)
+            throw new IllegalArgumentException("LengthOfTheSide must be greater then 0");
+        this.lengthOfTheSide = lengthOfTheSide;
+        return this;
+    }
 
     /**
      * Constructs a point light with the specified intensity and position.
@@ -44,6 +61,13 @@ public class PointLight extends Light implements LightSource {
     public PointLight(Color intensity, Point position) {
         super(intensity);
         this.position = position;
+    }
+
+    public PointLight setSoftShadowsRays(int numOfRays) {
+        if (numOfRays < 0)
+            throw new IllegalArgumentException("numOfRays must be greater then 0!");
+        softShadowsRays = numOfRays;
+        return this;
     }
 
     /**
@@ -93,5 +117,41 @@ public class PointLight extends Light implements LightSource {
     @Override
     public double getDistance(Point point) {
         return this.position.distance(point);
+    }
+
+
+    @Override
+    public List<Vector> getLBeam(Point p) {
+        if (lengthOfTheSide == 0) return List.of(getL(p));
+
+        List<Vector> vectors = new LinkedList<>();
+        // help vectors
+        Vector v0, v1;
+
+        // A variable that tells how many divide each side
+
+        double divided = Math.sqrt(softShadowsRays);
+
+        // plane of the light
+        Plane plane = new Plane(position, getL(p));
+
+        // vectors of the plane
+        List<Vector> vectorsOfThePlane = plane.findVectorsOfPlane();
+
+        // Starting point of the square around the lighting
+        Point startPoint = position.add(vectorsOfThePlane.get(0).normalize().scale(-lengthOfTheSide / 2.0))
+                .add(vectorsOfThePlane.get(1).normalize().scale(-lengthOfTheSide / 2.0));
+
+        // A loop that runs as the number of vectors and in each of its runs it brings a vector around the lamp
+        for (double i = 0; i < lengthOfTheSide; i += lengthOfTheSide / divided) {
+            for (double j = 0; j < lengthOfTheSide; j += lengthOfTheSide / divided) {
+                v0 = vectorsOfThePlane.get(0).normalize()
+                        .scale(random(i, i + lengthOfTheSide / divided));
+                v1 = vectorsOfThePlane.get(1).normalize()
+                        .scale(random(j, j + lengthOfTheSide / divided));
+                vectors.add(p.subtract(startPoint.add(v0).add(v1)).normalize());
+            }
+        }
+        return vectors;
     }
 }

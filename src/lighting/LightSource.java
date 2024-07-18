@@ -4,6 +4,8 @@ import primitives.Color;
 import primitives.Point;
 import primitives.Vector;
 
+import java.util.List;
+
 /**
  * This interface represents a light source in a scene.
  * Any light source in the scene should implement this interface.
@@ -36,4 +38,6 @@ public interface LightSource {
      * @return the distance
      */
     public double getDistance(Point point);
+
+    List<Vector> getLBeam(Point point);
 }

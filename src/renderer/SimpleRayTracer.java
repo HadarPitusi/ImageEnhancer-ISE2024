@@ -9,6 +9,7 @@ import geometries.Intersectable.GeoPoint;
 import lighting.LightSource;
 import primitives.Vector;
 
+import static lighting.PointLight.softShadowsRays;
 import static primitives.Util.alignZero;
 import static java.lang.Math.*;
 
@@ -178,23 +179,73 @@ public class SimpleRayTracer extends RayTracerBase {
         Vector n = geoPoint.geometry.getNormal(geoPoint.point);
         Vector v = ray.getDirection();
         Color color = geoPoint.geometry.getEmission();
+        Color tempColor = Color.BLACK;
         double nv = alignZero(n.dotProduct(v));
         if (nv == 0) return color;
 
-        Material material = geoPoint.geometry.getMaterial();
         for (LightSource lightSource : scene.lights) {
-            Vector l = lightSource.getL(geoPoint.point);
-            double nl = alignZero(n.dotProduct(l));
-            if (nl * nv > 0) {
-                Double3 ktr = transparency(geoPoint, lightSource, l, n);
-                if (!ktr.product(k).lowerThan(MIN_CALC_COLOR_K)) {
-                    Color iL = lightSource.getIntensity(geoPoint.point).scale(ktr);
-                    color = color.add(iL.scale(calcDiffusive(material, nl).add(calcSpecular(material, n, l, nl, v))));
+            List<Vector> vectors = (softShadowsRays==0) ? List.of(lightSource.getL(geoPoint.point))
+                    : lightSource.getLBeam(geoPoint.point);
+
+            Material material = geoPoint.geometry.getMaterial();
+            for (Vector l : vectors) {
+                double nl = alignZero(n.dotProduct(l));
+                if (nl * nv > 0) {
+                    Double3 ktr = transparency(geoPoint, lightSource, l, n);
+                    if (!ktr.product(k).lowerThan(MIN_CALC_COLOR_K)) {
+                        Color iL = lightSource.getIntensity(geoPoint.point).scale(ktr);
+                        tempColor = tempColor.add(iL.scale(calcDiffusive(material, nl).add(calcSpecular(material, n, l, nl, v))));
+                    }
                 }
             }
+            int reduceBy = vectors.size();
+            color = color.add((softShadowsRays==0) ? tempColor :
+                    tempColor.reduce(reduceBy > 0 ? reduceBy : 1));
         }
         return color;
+
     }
+
+
+    //region Calculate Effects Methods
+    /** private Color calcLocalEffects(GeoPoint geoPoint, Ray ray, Double3 k) {
+     Color color = Color.BLACK;
+     Vector v = ray.getDir();
+     Vector n = geoPoint.geometry.getNormal(geoPoint.point);
+
+     Double3 kd = geoPoint.geometry.getMaterial().kD;
+     Double3 ks = geoPoint.geometry.getMaterial().kS;
+     int nShininess = geoPoint.geometry.getMaterial().nShininess;
+
+     double nv = n.dotProduct(v);
+     if (nv == 0)
+     return color;
+
+     for (LightSource lightSource : scene.lights) {
+     List<Vector> vectors = (!useSoftShadow) ? List.of(lightSource.getL(geoPoint.point))
+     : lightSource.getLBeam(geoPoint.point);
+
+     Color tempColor = Color.BLACK;
+     for(Vector l : vectors) {
+     double nl = n.dotProduct(l);
+     if (nl * nv > 0) { // sign(nl) == sing(nv)
+     Double3 ktr = transparency(geoPoint, lightSource, l, n);
+     if(!ktr.product(k).lowerThan(MIN_CALC_COLOR_K)) {
+     Color lightIntensity = lightSource.getIntensity(geoPoint.point)
+     .scale(ktr);
+
+     tempColor = tempColor.add(calcDiffusive(kd, l, n, lightIntensity),
+     calcSpecular(ks, l, n, v, nShininess, lightIntensity));
+     }
+     }
+     }
+     int reduceBy = vectors.size();
+     color = color.add((!useSoftShadow) ? tempColor :
+     tempColor.reduce(reduceBy > 0 ? reduceBy : 1));
+     }
+     return color;
+     }**/
+
 
     /**
      * Calculates the transparency attenuation factor for a given intersection point.

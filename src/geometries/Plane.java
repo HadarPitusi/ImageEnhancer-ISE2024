@@ -4,6 +4,7 @@ import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import static primitives.Util.*;
@@ -74,5 +75,30 @@ public class Plane extends Geometry {
             return null;
 
         return List.of(new GeoPoint(this, ray.getPoint(t)));
+    }
+
+    public List<Vector> findVectorsOfPlane() {
+        List<Vector> vectors = new LinkedList<>();
+        double nX = this.getNormal().getX(), nY = this.getNormal().getY(), nZ = this.getNormal().getZ();
+        double pX = q.getX(), pY = q.getY(), pZ = q.getZ();
+        double d = -(nX * pX + nY * pY + nZ * pZ);
+        Point p0 = q;
+        int amount = 0;
+        // we calculate a point on the plane, and then we create a vector with the point
+        if (nX != 0) {
+            double x1 = (d / nX);
+            vectors.add((new Point(x1, 0, 0)).subtract(p0));
+            amount++;
+        }
+        if (nY != 0) {
+            double y2 = (d / nY);
+            vectors.add((new Point(0, y2, 0)).subtract(p0));
+            amount++;
+        }
+        if (nZ != 0 && amount < 2) {
+            double z3 = (d / nZ);
+            vectors.add((new Point(0, 0, z3)).subtract(p0));
+        }
+        return vectors;
     }
 }
