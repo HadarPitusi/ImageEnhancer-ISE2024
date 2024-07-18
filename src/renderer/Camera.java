@@ -4,12 +4,9 @@ import primitives.Color;
 import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
-import scene.Scene;
-
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.MissingResourceException;
-
 import static primitives.Util.isZero;
 
 /**
@@ -25,7 +22,7 @@ public class Camera implements Cloneable {
     private double distance = 0.0;
     private ImageWriter imageWriter;
     private RayTracerBase rayTracer;
-    private int numOfRays = 1;
+    private int numOfRays = 1; //for anty-alasing
 
 
     /**
@@ -271,7 +268,6 @@ public class Camera implements Cloneable {
         this.imageWriter.writePixel(column, row, color);
     }
 
-
     /**
      * Renders the image.
      */
@@ -285,69 +281,18 @@ public class Camera implements Cloneable {
                     castRay(nx, ny, i, j);
                 }
             }
-        } /**else {
+        } else {
             for (int i = 0; i < nx; i++) {
               for (int j = 0; j < ny; j++) {
-              Color color = this.castRayBeam(nx, ny, i, j);
-              this.imageWriter.writePixel(nx, j, color);
+                  List<Ray> rays=this.constructRays(nx, ny, i, j);
+                 Color color = average(rays);
+                 this.imageWriter.writePixel(i, j, color);
               }
             }
-         }**/
+         }
 
         return this;
     }
-
-    /**private Color castRayBeam(int nx, int ny, int i, int j) {
-        Ray centerRay=this.constructRay(nx,ny,x,y);
-        Color centerColor = this.rayTracer.tracerRay(centerRay);
-        List<Ray> rayBeam = constructRayBeam(centerRay, 4,distance,
-                this.width/nx,this.height/ny);
-
-        Color average = new Color(0, 0, 0);
-        //calc the average
-        for (var ray : rayBeam) {
-            Color c = this.rayTracer.tracerRay(ray);
-            average = average.add(this.rayTracer.tracerRay(ray));
-        }
-
-
-        //else continue with calculate
-        rayBeam = constructRayBeam(centerRay, numOfRays - 4,distance,
-                this.width/nx,this.height/ny);
-
-        for (var ray : rayBeam) {
-            Color c = this.rayTracer.tracerRay(ray);
-            average = average.add(this.rayTracer.tracerRay(ray));
-        }
-
-        return average.reduce(numOfRays);
-
-    }**/
-
-    /**public static List<Ray> constructRayBeam(Ray ray,int numberOfRays, double distance, double pixelWidth, double pixelHeight ) {
-        ArrayList<Ray> resultList = new ArrayList<Ray>();
-
-        //find the X,Y
-        Vector rotatedVector, vUp = ray.getDirection().findOrthogonal(),
-                vRight = vUp.crossProduct(ray.getDirection()).normalize();
-        Point point, targetAreaCenter = ray.getPoint(distance);//move the point to the target area
-        resultList.add(ray);
-        if (numberOfRays == 0)
-            return resultList;
-        double randomWidth, randomHeight; //randomise points on circle
-        for (int i = 1; i < numberOfRays; i++) {
-            randomWidth = random(-pixelWidth /2, pixelWidth /2);
-            randomHeight = random(-pixelHeight/2, pixelHeight/2);
-            rotatedVector = vUp.rotate(vRight, randomHeight);
-            point = targetAreaCenter;
-            if (!isZero(randomWidth))
-                point = point.add(vRight.scale(randomWidth));
-            if (!isZero(randomHeight))
-                point = point.add(vUp.scale(randomHeight));
-            resultList.add(new Ray(ray.getHead(), point.subtract(ray.getHead())));
-        }
-        return resultList;
-    }**/
 
     /**
      * Prints a grid on the image with the specified interval and color.
@@ -377,6 +322,71 @@ public class Camera implements Cloneable {
         this.imageWriter.writeToImage();
     }
 
+    /**
+     * Constructs a list of rays through a specified pixel.
+     *
+     * @param nX the number of pixels in the x direction
+     * @param nY the number of pixels in the y direction
+     * @param i the x coordinate of the pixel
+     * @param j the y coordinate of the pixel
+     * @return a list of rays through the specified pixel
+     */
+    public List<Ray> constructRays(int nX, int nY, int i, int j) {
+        List<Ray> rays = new LinkedList<>();
+        Point centralPixel = findPixelLocation(nX, nY, i, j);
+        double rY = height / nY / numOfRays;
+        double rX = width / nX / numOfRays;
+        double x, y;
+
+        for (int rowNumber = 0; rowNumber < numOfRays; rowNumber++) {
+            for (int colNumber = 0; colNumber < numOfRays; colNumber++) {
+                y = -(rowNumber - (numOfRays - 1d) / 2) * rY;
+                x = (colNumber - (numOfRays - 1d) / 2) * rX;
+                Point pIJ = centralPixel;
+                if (y != 0) pIJ = pIJ.add(vUp.scale(y));
+                if (x != 0) pIJ = pIJ.add(vRight.scale(x));
+                rays.add(new Ray(p0, pIJ.subtract(p0)));
+            }
+        }
+        return rays;
+    }
+
+    /**
+     * Finds the location of the central point of a specified pixel.
+     *
+     * @param nX the number of pixels in the x direction
+     * @param nY the number of pixels in the y direction
+     * @param i the x coordinate of the pixel
+     * @param j the y coordinate of the pixel
+     * @return the location of the central point of the specified pixel
+     */
+    private Point findPixelLocation(int nX, int nY, int i, int j) {
+        double rY = height / nY;
+        double rX = width / nX;
+
+        double yJ = -(j - (nY - 1d) / 2) * rY;
+        double xI = (i - (nX - 1d) / 2) * rX;
+        Point pIJ = p0.add(vTo.scale(distance));
+
+        if (yJ != 0) pIJ = pIJ.add(vUp.scale(yJ));
+        if (xI != 0) pIJ = pIJ.add(vRight.scale(xI));
+        return pIJ;
+    }
+
+    /**
+     * Calculates the average color of a list of rays.
+     *
+     * @param rays the list of rays
+     * @return the average color of the rays
+     */
+    private Color average(List<Ray> rays) {
+        Color colorOfPixel = Color.BLACK;
+        for (Ray ray : rays) {
+            Color colorOfRay = this.rayTracer.tracerRay(ray);
+            colorOfPixel = colorOfPixel.add(colorOfRay);
+        }
+        return colorOfPixel.reduce(rays.size());
+    }
 
 }
 
