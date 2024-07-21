@@ -38,7 +38,7 @@ public class Triangle extends Polygon {
         double d1 = v.dotProduct(n1);
         double d2 = v.dotProduct(n2);
         double d3 = v.dotProduct(n3);
-        //  double t=ray.getHead().distance(planeIntersection.get(0).point);
+
         //At least one of the scalar products is equal to zero - no cutting
         if (isZero(d1) || isZero(d2) || isZero(d3))
             return null;

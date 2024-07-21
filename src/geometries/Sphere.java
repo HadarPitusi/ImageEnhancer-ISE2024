@@ -10,7 +10,6 @@ import java.util.List;
 
 import static java.lang.Math.sqrt;
 
-//אצל יאיר בסרטון מופיע ש Sphere implements Gieometry
 public class Sphere extends RadialGeometry {
 
     private final Point center;

@@ -45,9 +45,15 @@ public class PointLight extends Light implements LightSource {
     private int lengthOfTheSide;
 
 
+    /**
+     * Sets the length of the side for the PointLight.
+     * @param lengthOfTheSide the length of the side to set. Must be greater than 0.
+     * @return the current PointLight instance for method chaining.
+     * @throws IllegalArgumentException if {@code lengthOfTheSide} is less than or equal to 0.
+     */
     public PointLight setLengthOfTheSide(int lengthOfTheSide) {
         if (lengthOfTheSide < 0)
-            throw new IllegalArgumentException("LengthOfTheSide must be greater then 0");
+            throw new IllegalArgumentException("LengthOfTheSide must be greater than 0");
         this.lengthOfTheSide = lengthOfTheSide;
         return this;
     }
@@ -63,13 +69,19 @@ public class PointLight extends Light implements LightSource {
         this.position = position;
     }
 
-    public PointLight setSoftShadowsRays(int numOfRays) {
-        if (numOfRays < 0)
-            throw new IllegalArgumentException("numOfRays must be greater then 0!");
-        softShadowsRays = numOfRays;
+
+    /**
+     * Sets the number of rays used for soft shadows.
+     * @param softShadowsRays the number of rays to set for soft shadows. Must be greater than 0.
+     * @return the current PointLight instance for method chaining.
+     * @throws IllegalArgumentException if {@code numOfRays} is less than or equal to 0.
+     */
+    public PointLight setSoftShadowsRays(int softShadowsRays) {
+        if (softShadowsRays < 0)
+            throw new IllegalArgumentException("numOfRays must be greater than 0!");
+        this.softShadowsRays = softShadowsRays;
         return this;
     }
-
     /**
      * Sets the constant attenuation factor.
      *
@@ -119,21 +131,19 @@ public class PointLight extends Light implements LightSource {
         return this.position.distance(point);
     }
 
-
     @Override
-    public List<Vector> getLBeam(Point p) {
-        if (lengthOfTheSide == 0) return List.of(getL(p));
+    public List<Vector> getLBeam(Point point) {
+        if (lengthOfTheSide == 0) return List.of(getL(point));
 
         List<Vector> vectors = new LinkedList<>();
         // help vectors
         Vector v0, v1;
 
         // A variable that tells how many divide each side
-
         double divided = Math.sqrt(softShadowsRays);
 
         // plane of the light
-        Plane plane = new Plane(position, getL(p));
+        Plane plane = new Plane(position, getL(point));
 
         // vectors of the plane
         List<Vector> vectorsOfThePlane = plane.findVectorsOfPlane();
@@ -149,9 +159,10 @@ public class PointLight extends Light implements LightSource {
                         .scale(random(i, i + lengthOfTheSide / divided));
                 v1 = vectorsOfThePlane.get(1).normalize()
                         .scale(random(j, j + lengthOfTheSide / divided));
-                vectors.add(p.subtract(startPoint.add(v0).add(v1)).normalize());
+                vectors.add(point.subtract(startPoint.add(v0).add(v1)).normalize());
             }
         }
         return vectors;
     }
+
 }

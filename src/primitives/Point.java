@@ -83,18 +83,32 @@ public class Point {
         return this.xyz.toString();
     }
 
-
-
+    /**
+     * Gets the X coordinate.
+     *
+     * @return the X coordinate.
+     */
     public double getX() {
         return xyz.d1;
     }
 
+    /**
+     * Gets the Y coordinate.
+     *
+     * @return the Y coordinate.
+     */
     public double getY() {
         return xyz.d2;
     }
 
+    /**
+     * Gets the Z coordinate.
+     *
+     * @return the Z coordinate.
+     */
     public double getZ() {
         return xyz.d3;
     }
+
 
 }

@@ -77,6 +77,11 @@ public class Plane extends Geometry {
         return List.of(new GeoPoint(this, ray.getPoint(t)));
     }
 
+    /**
+     * Finds vectors lying on the plane.
+     *
+     * @return a list of vectors lying on the plane.
+     */
     public List<Vector> findVectorsOfPlane() {
         List<Vector> vectors = new LinkedList<>();
         double nX = this.getNormal().getX(), nY = this.getNormal().getY(), nZ = this.getNormal().getZ();
@@ -84,7 +89,7 @@ public class Plane extends Geometry {
         double d = -(nX * pX + nY * pY + nZ * pZ);
         Point p0 = q;
         int amount = 0;
-        // we calculate a point on the plane, and then we create a vector with the point
+        //calculate a point on the plane, and create a vector with the point
         if (nX != 0) {
             double x1 = (d / nX);
             vectors.add((new Point(x1, 0, 0)).subtract(p0));

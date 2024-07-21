@@ -4,9 +4,11 @@ import primitives.Color;
 import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.MissingResourceException;
+
 import static primitives.Util.isZero;
 
 /**
@@ -22,7 +24,7 @@ public class Camera implements Cloneable {
     private double distance = 0.0;
     private ImageWriter imageWriter;
     private RayTracerBase rayTracer;
-    private int numOfRays = 1; //for anty-alasing
+    private int antiAliasingRays = 1;
 
 
     /**
@@ -50,7 +52,7 @@ public class Camera implements Cloneable {
             this.camera.height = camera.height;
             this.camera.width = camera.width;
             this.camera.distance = camera.distance;
-            this.camera.numOfRays=camera.numOfRays;
+            this.camera.antiAliasingRays = camera.antiAliasingRays;
         }
 
         /**
@@ -131,8 +133,14 @@ public class Camera implements Cloneable {
             return this;
         }
 
-        public Builder setNumOfRays(int numOfRays) {
-            this.camera.numOfRays = numOfRays;
+        /**
+         * Sets the number of rays for anti-aliasing.
+         *
+         * @param antiAliasingRays the number of rays to set for anti-aliasing. Must be greater than 0.
+         * @return the current Builder instance for method chaining.
+         */
+        public Builder setAntiAliasingRays(int antiAliasingRays) {
+            this.camera.antiAliasingRays = antiAliasingRays;
             return this;
         }
 
@@ -269,13 +277,17 @@ public class Camera implements Cloneable {
     }
 
     /**
-     * Renders the image.
+     * Renders the image by casting rays through each pixel and computing the color
+     * based on the scene's objects and lights. This method supports anti-aliasing
+     * by casting multiple rays per pixel and averaging the colors.
+     *
+     * @return the current Camera instance for method chaining.
      */
     public Camera renderImage() {
         int nx = imageWriter.getNx();
         int ny = imageWriter.getNy();
 
-        if (numOfRays == 1) {
+        if (antiAliasingRays == 1) {
             for (int i = 0; i < nx; i++) {
                 for (int j = 0; j < ny; j++) {
                     castRay(nx, ny, i, j);
@@ -283,14 +295,13 @@ public class Camera implements Cloneable {
             }
         } else {
             for (int i = 0; i < nx; i++) {
-              for (int j = 0; j < ny; j++) {
-                  List<Ray> rays=this.constructRays(nx, ny, i, j);
-                 Color color = average(rays);
-                 this.imageWriter.writePixel(i, j, color);
-              }
+                for (int j = 0; j < ny; j++) {
+                    List<Ray> rays = this.constructRays(nx, ny, i, j);
+                    Color color = average(rays);
+                    this.imageWriter.writePixel(i, j, color);
+                }
             }
-         }
-
+        }
         return this;
     }
 
@@ -327,21 +338,21 @@ public class Camera implements Cloneable {
      *
      * @param nX the number of pixels in the x direction
      * @param nY the number of pixels in the y direction
-     * @param i the x coordinate of the pixel
-     * @param j the y coordinate of the pixel
+     * @param i  the x coordinate of the pixel
+     * @param j  the y coordinate of the pixel
      * @return a list of rays through the specified pixel
      */
     public List<Ray> constructRays(int nX, int nY, int i, int j) {
         List<Ray> rays = new LinkedList<>();
         Point centralPixel = findPixelLocation(nX, nY, i, j);
-        double rY = height / nY / numOfRays;
-        double rX = width / nX / numOfRays;
+        double rY = height / nY / antiAliasingRays;
+        double rX = width / nX / antiAliasingRays;
         double x, y;
 
-        for (int rowNumber = 0; rowNumber < numOfRays; rowNumber++) {
-            for (int colNumber = 0; colNumber < numOfRays; colNumber++) {
-                y = -(rowNumber - (numOfRays - 1d) / 2) * rY;
-                x = (colNumber - (numOfRays - 1d) / 2) * rX;
+        for (int rowNumber = 0; rowNumber < antiAliasingRays; rowNumber++) {
+            for (int colNumber = 0; colNumber < antiAliasingRays; colNumber++) {
+                y = -(rowNumber - (antiAliasingRays - 1d) / 2) * rY;
+                x = (colNumber - (antiAliasingRays - 1d) / 2) * rX;
                 Point pIJ = centralPixel;
                 if (y != 0) pIJ = pIJ.add(vUp.scale(y));
                 if (x != 0) pIJ = pIJ.add(vRight.scale(x));
@@ -354,23 +365,29 @@ public class Camera implements Cloneable {
     /**
      * Finds the location of the central point of a specified pixel.
      *
-     * @param nX the number of pixels in the x direction
-     * @param nY the number of pixels in the y direction
-     * @param i the x coordinate of the pixel
-     * @param j the y coordinate of the pixel
+     * @param numXPixels the number of pixels along the horizontal axis (width) of the screen.
+     * @param numYPixels the number of pixels along the vertical axis (height) of the screen.
+     * @param i          the x coordinate of the pixel
+     * @param j          the y coordinate of the pixel
      * @return the location of the central point of the specified pixel
      */
-    private Point findPixelLocation(int nX, int nY, int i, int j) {
-        double rY = height / nY;
-        double rX = width / nX;
+    private Point findPixelLocation(int numXPixels, int numYPixels, int i, int j) {
+        // Calculate the size of each pixel along the X and Y axes
+        double pixelHeight = height / numYPixels;
+        double pixelWidth = width / numXPixels;
 
-        double yJ = -(j - (nY - 1d) / 2) * rY;
-        double xI = (i - (nX - 1d) / 2) * rX;
-        Point pIJ = p0.add(vTo.scale(distance));
+        // Calculate the offset of the pixel from the center of the screen
+        double offsetY = -(j - (numYPixels - 1d) / 2) * pixelHeight;
+        double offsetX = (i - (numXPixels - 1d) / 2) * pixelWidth;
 
-        if (yJ != 0) pIJ = pIJ.add(vUp.scale(yJ));
-        if (xI != 0) pIJ = pIJ.add(vRight.scale(xI));
-        return pIJ;
+        // Compute the point at the center of the screen based on the camera's view direction
+        Point pixelPoint = p0.add(vTo.scale(distance));
+
+        // Adjust the center point by the calculated offsets to get the exact pixel location
+        if (offsetY != 0) pixelPoint = pixelPoint.add(vUp.scale(offsetY));
+        if (offsetX != 0) pixelPoint = pixelPoint.add(vRight.scale(offsetX));
+
+        return pixelPoint;
     }
 
     /**

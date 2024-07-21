@@ -168,12 +168,14 @@ public class SimpleRayTracer extends RayTracerBase {
     }
 
     /**
-     * Calculates the local effects (diffuse and specular) at a given intersection point.
+     * Calculates the local lighting effects at a given point.
+     * This method considers both diffuse and specular reflections,
+     * as well as the effects of transparency and shadows.
      *
-     * @param geoPoint the intersection point
-     * @param ray      the ray causing the intersection
-     * @param k        the attenuation factor
-     * @return the calculated color considering local effects
+     * @param geoPoint the point at which the lighting effects are calculated.
+     * @param ray the ray that intersects the geometry at the geoPoint.
+     * @param k the attenuation factor for recursive reflections.
+     * @return the color resulting from the local lighting effects at the given point.
      */
     private Color calcLocalEffects(GeoPoint geoPoint, Ray ray, Double3 k) {
         Vector n = geoPoint.geometry.getNormal(geoPoint.point);
@@ -205,47 +207,6 @@ public class SimpleRayTracer extends RayTracerBase {
         return color;
 
     }
-
-
-    //region Calculate Effects Methods
-    /** private Color calcLocalEffects(GeoPoint geoPoint, Ray ray, Double3 k) {
-     Color color = Color.BLACK;
-     Vector v = ray.getDir();
-     Vector n = geoPoint.geometry.getNormal(geoPoint.point);
-
-     Double3 kd = geoPoint.geometry.getMaterial().kD;
-     Double3 ks = geoPoint.geometry.getMaterial().kS;
-     int nShininess = geoPoint.geometry.getMaterial().nShininess;
-
-     double nv = n.dotProduct(v);
-     if (nv == 0)
-     return color;
-
-     for (LightSource lightSource : scene.lights) {
-     List<Vector> vectors = (!useSoftShadow) ? List.of(lightSource.getL(geoPoint.point))
-     : lightSource.getLBeam(geoPoint.point);
-
-     Color tempColor = Color.BLACK;
-     for(Vector l : vectors) {
-     double nl = n.dotProduct(l);
-     if (nl * nv > 0) { // sign(nl) == sing(nv)
-     Double3 ktr = transparency(geoPoint, lightSource, l, n);
-     if(!ktr.product(k).lowerThan(MIN_CALC_COLOR_K)) {
-     Color lightIntensity = lightSource.getIntensity(geoPoint.point)
-     .scale(ktr);
-
-     tempColor = tempColor.add(calcDiffusive(kd, l, n, lightIntensity),
-     calcSpecular(ks, l, n, v, nShininess, lightIntensity));
-     }
-     }
-     }
-     int reduceBy = vectors.size();
-     color = color.add((!useSoftShadow) ? tempColor :
-     tempColor.reduce(reduceBy > 0 ? reduceBy : 1));
-     }
-     return color;
-     }**/
-
 
     /**
      * Calculates the transparency attenuation factor for a given intersection point.

@@ -39,5 +39,12 @@ public interface LightSource {
      */
     public double getDistance(Point point);
 
+
+    /**
+     * Generates a list of vectors for soft shadow beams from the light source.
+     * If {@code lengthOfTheSide} is zero, it returns a single vector.
+     * @param point the point from which to calculate the light beam vectors.
+     * @return a list of vectors representing the directions of the light beams.
+     */
     List<Vector> getLBeam(Point point);
 }
