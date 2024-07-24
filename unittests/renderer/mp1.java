@@ -15,18 +15,23 @@ public class mp1 {
     private final Scene scene = new Scene("mp1").setBackground(new Color(245, 245, 220));
 
     private final Camera.Builder cameraBuilder = Camera.getBuilder().setDirection(new Vector(-8, -8, -3), new Vector(-100, -100, 533.3333333333333))
-            .setRayTracer(new SimpleRayTracer(scene));//.setAntiAliasingRays(50);
+            .setRayTracer(new SimpleRayTracer(scene)).setAntiAliasingRays(1);
 
     @Test
     public void mpTest() {
-        Color strongGreen= new Color(0, 100, 0);
+        Color myStrongGreen= new Color(0, 100, 0);
+        Color myPurple=new Color(127,0,255);
+        Color myOrange=new Color(255,127,0);
         Color emmisionGreen= new Color(0, 240, 10);
         Color emmisionStrongGreen= new Color(5, 92, 5);
         Color emmisionBlue= new Color(0, 10, 240);
+        Color emmisionPurple=new Color(115,0,240);
+        Color emmisionOrange=new Color(240,115,0);
+
         scene.setAmbientLight(new AmbientLight(new Color(WHITE), new Double3(0.1)));
         scene.lights.add(
                 new PointLight(new Color(255, 240, 245), new Point(-79, -20, 40))
-                        .setKl(0.04).setKq(2E-5).setLengthOfTheSide(2));//.setSoftShadowsRays(50));
+                        .setKl(0.04).setKq(2E-5).setLengthOfTheSide(2));//.setSoftShadowsRays(20));
         scene.lights.add(new DirectionalLight(new Color(WHITE), new Vector(-80, -80, 30)));
         scene.lights.add(
                 new SpotLight(
@@ -39,7 +44,59 @@ public class mp1 {
         Material material = new Material().setKd(0.3).setKs(0.5).setShininess(50).setKr(0.3);
 
         scene.geometries.add(
-                /**-------משטח2-------**/
+                /**------1-------**/
+                new Sphere(new Point(0, 0, 10), 5)
+                        .setEmission(myStrongGreen).setMaterial(material).setEmission(emmisionStrongGreen),
+                new Sphere(new Point(10, 0, 10), 5)
+                        .setEmission(myStrongGreen).setMaterial(material).setEmission(emmisionStrongGreen),
+                new Sphere(new Point(-10, 0, 10), 5)
+                        .setEmission(myStrongGreen).setMaterial(material).setEmission(emmisionStrongGreen),
+                new Sphere(new Point(20, 0, 10), 5)
+                        .setEmission(myStrongGreen).setMaterial(material).setEmission(emmisionStrongGreen),
+                new Sphere(new Point(-20, 0, 10), 5)
+                        .setEmission(myStrongGreen).setMaterial(material).setEmission(emmisionStrongGreen),
+                new Sphere(new Point(0, 10, 10), 5)
+                        .setEmission(myStrongGreen).setMaterial(material).setEmission(emmisionStrongGreen),
+                new Sphere(new Point(10, 10, 10), 5)
+                        .setEmission(myStrongGreen).setMaterial(material).setEmission(emmisionStrongGreen),
+                new Sphere(new Point(-10, 10, 10), 5)
+                        .setEmission(myStrongGreen).setMaterial(material).setEmission(emmisionStrongGreen),
+                new Sphere(new Point(20, 10, 10), 5)
+                        .setEmission(myStrongGreen).setMaterial(material).setEmission(emmisionStrongGreen),
+                new Sphere(new Point(-20, 10, 10), 5)
+                        .setEmission(myStrongGreen).setMaterial(material).setEmission(emmisionStrongGreen),
+                new Sphere(new Point(0, -10, 10), 5)
+                        .setEmission(myStrongGreen).setMaterial(material).setEmission(emmisionStrongGreen),
+                new Sphere(new Point(10, -10, 10), 5)
+                        .setEmission(myStrongGreen).setMaterial(material).setEmission(emmisionStrongGreen),
+                new Sphere(new Point(-10, -10, 10), 5)
+                        .setEmission(myStrongGreen).setMaterial(material).setEmission(emmisionStrongGreen),
+                new Sphere(new Point(20, -10, 10), 5)
+                        .setEmission(myStrongGreen).setMaterial(material).setEmission(emmisionStrongGreen),
+                new Sphere(new Point(-20, -10, 10), 5)
+                        .setEmission(myStrongGreen).setMaterial(material).setEmission(emmisionStrongGreen),
+                new Sphere(new Point(0, 20, 10), 5)
+                        .setEmission(myStrongGreen).setMaterial(material).setEmission(emmisionStrongGreen),
+                new Sphere(new Point(10, 20, 10), 5)
+                        .setEmission(myStrongGreen).setMaterial(material).setEmission(emmisionStrongGreen),
+                new Sphere(new Point(-10, 20, 10), 5)
+                        .setEmission(myStrongGreen).setMaterial(material).setEmission(emmisionStrongGreen),
+                new Sphere(new Point(20, 20, 10), 5)
+                        .setEmission(myStrongGreen).setMaterial(material).setEmission(emmisionStrongGreen),
+                new Sphere(new Point(-20, 20, 10), 5)
+                        .setEmission(myStrongGreen).setMaterial(material).setEmission(emmisionStrongGreen),
+                new Sphere(new Point(0, -20, 10), 5)
+                        .setEmission(myStrongGreen).setMaterial(material).setEmission(emmisionStrongGreen),
+                new Sphere(new Point(10, -20, 10), 5)
+                        .setEmission(myStrongGreen).setMaterial(material).setEmission(emmisionStrongGreen),
+                new Sphere(new Point(-10, -20, 10), 5)
+                        .setEmission(myStrongGreen).setMaterial(material).setEmission(emmisionStrongGreen),
+                new Sphere(new Point(20, -20, 10), 5)
+                        .setEmission(myStrongGreen).setMaterial(material).setEmission(emmisionStrongGreen),
+                new Sphere(new Point(-20, -20, 10), 5)
+                        .setEmission(myStrongGreen).setMaterial(material).setEmission(emmisionStrongGreen),
+
+                /**-------2-------**/
                 new Sphere(new Point(20, 0, 0), 5)
                         .setEmission(new Color(GREEN)).setMaterial(material).setEmission(emmisionGreen),
                 new Sphere(new Point(-20, 0, 0), 5)
@@ -73,58 +130,7 @@ public class mp1 {
                 new Sphere(new Point(-20, -20, 0), 5)
                         .setEmission(new Color(GREEN)).setMaterial(material).setEmission(emmisionGreen),
 
-                /**-------משט1-------**/
-                new Sphere(new Point(0, 0, 10), 5)
-                        .setEmission(strongGreen).setMaterial(material).setEmission(emmisionStrongGreen),
-                new Sphere(new Point(10, 0, 10), 5)
-                        .setEmission(strongGreen).setMaterial(material).setEmission(emmisionStrongGreen),
-                new Sphere(new Point(-10, 0, 10), 5)
-                        .setEmission(strongGreen).setMaterial(material).setEmission(emmisionStrongGreen),
-                new Sphere(new Point(20, 0, 10), 5)
-                        .setEmission(strongGreen).setMaterial(material).setEmission(emmisionStrongGreen),
-                new Sphere(new Point(-20, 0, 10), 5)
-                        .setEmission(strongGreen).setMaterial(material).setEmission(emmisionStrongGreen),
-                new Sphere(new Point(0, 10, 10), 5)
-                        .setEmission(strongGreen).setMaterial(material).setEmission(emmisionStrongGreen),
-                new Sphere(new Point(10, 10, 10), 5)
-                        .setEmission(strongGreen).setMaterial(material).setEmission(emmisionStrongGreen),
-                new Sphere(new Point(-10, 10, 10), 5)
-                        .setEmission(strongGreen).setMaterial(material).setEmission(emmisionStrongGreen),
-                new Sphere(new Point(20, 10, 10), 5)
-                        .setEmission(strongGreen).setMaterial(material).setEmission(emmisionStrongGreen),
-                new Sphere(new Point(-20, 10, 10), 5)
-                        .setEmission(strongGreen).setMaterial(material).setEmission(emmisionStrongGreen),
-                new Sphere(new Point(0, -10, 10), 5)
-                        .setEmission(strongGreen).setMaterial(material).setEmission(emmisionStrongGreen),
-                new Sphere(new Point(10, -10, 10), 5)
-                        .setEmission(strongGreen).setMaterial(material).setEmission(emmisionStrongGreen),
-                new Sphere(new Point(-10, -10, 10), 5)
-                        .setEmission(strongGreen).setMaterial(material).setEmission(emmisionStrongGreen),
-                new Sphere(new Point(20, -10, 10), 5)
-                        .setEmission(strongGreen).setMaterial(material).setEmission(emmisionStrongGreen),
-                new Sphere(new Point(-20, -10, 10), 5)
-                        .setEmission(strongGreen).setMaterial(material).setEmission(emmisionStrongGreen),
-                new Sphere(new Point(0, 20, 10), 5)
-                        .setEmission(strongGreen).setMaterial(material).setEmission(emmisionStrongGreen),
-                new Sphere(new Point(10, 20, 10), 5)
-                        .setEmission(strongGreen).setMaterial(material).setEmission(emmisionStrongGreen),
-                new Sphere(new Point(-10, 20, 10), 5)
-                        .setEmission(strongGreen).setMaterial(material).setEmission(emmisionStrongGreen),
-                new Sphere(new Point(20, 20, 10), 5)
-                        .setEmission(strongGreen).setMaterial(material).setEmission(emmisionStrongGreen),
-                new Sphere(new Point(-20, 20, 10), 5)
-                        .setEmission(strongGreen).setMaterial(material).setEmission(emmisionStrongGreen),
-                new Sphere(new Point(0, -20, 10), 5)
-                        .setEmission(strongGreen).setMaterial(material).setEmission(emmisionStrongGreen),
-                new Sphere(new Point(10, -20, 10), 5)
-                        .setEmission(strongGreen).setMaterial(material).setEmission(emmisionStrongGreen),
-                new Sphere(new Point(-10, -20, 10), 5)
-                        .setEmission(strongGreen).setMaterial(material).setEmission(emmisionStrongGreen),
-                new Sphere(new Point(20, -20, 10), 5)
-                        .setEmission(strongGreen).setMaterial(material).setEmission(emmisionStrongGreen),
-                new Sphere(new Point(-20, -20, 10), 5)
-                        .setEmission(strongGreen).setMaterial(material).setEmission(emmisionStrongGreen),
-                /**-------משטח3-------**/
+                /**-------3-------**/
                 new Sphere(new Point(20, 0, -10), 5)
                         .setEmission(new Color(BLUE)).setMaterial(material).setEmission(emmisionBlue),
                 new Sphere(new Point(-20, 0, -10), 5)
@@ -158,73 +164,73 @@ public class mp1 {
                 new Sphere(new Point(-20, -20, -10), 5)
                         .setEmission(new Color(BLUE)).setMaterial(material).setEmission(emmisionBlue),
 
-                /**-------משטח5-------**/
+                /**------4------**/
                 new Sphere(new Point(20, 0, -20), 5)
-                        .setEmission(new Color(127, 0, 255)).setMaterial(material).setEmission(new Color(115, 0, 240)),
+                        .setEmission(myPurple).setMaterial(material).setEmission(emmisionPurple),
                 new Sphere(new Point(-20, 0, -20), 5)
-                        .setEmission(new Color(127, 0, 255)).setMaterial(material).setEmission(new Color(115, 0, 240)),
+                        .setEmission(myPurple).setMaterial(material).setEmission(emmisionPurple),
                 new Sphere(new Point(20, 10, -20), 5)
-                        .setEmission(new Color(127, 0, 255)).setMaterial(material).setEmission(new Color(115, 0, 240)),
+                        .setEmission(myPurple).setMaterial(material).setEmission(emmisionPurple),
                 new Sphere(new Point(-20, 10, -20), 5)
-                        .setEmission(new Color(127, 0, 255)).setMaterial(material).setEmission(new Color(115, 0, 240)),
+                        .setEmission(myPurple).setMaterial(material).setEmission(emmisionPurple),
                 new Sphere(new Point(20, -10, -20), 5)
-                        .setEmission(new Color(127, 0, 255)).setMaterial(material).setEmission(new Color(115, 0, 240)),
+                        .setEmission(myPurple).setMaterial(material).setEmission(emmisionPurple),
                 new Sphere(new Point(-20, -10, -20), 5)
-                        .setEmission(new Color(127, 0, 255)).setMaterial(material).setEmission(new Color(115, 0, 240)),
+                        .setEmission(myPurple).setMaterial(material).setEmission(emmisionPurple),
                 new Sphere(new Point(0, 20, -20), 5)
-                        .setEmission(new Color(127, 0, 255)).setMaterial(material).setEmission(new Color(115, 0, 240)),
+                        .setEmission(myPurple).setMaterial(material).setEmission(emmisionPurple),
                 new Sphere(new Point(10, 20, -20), 5)
-                        .setEmission(new Color(127, 0, 255)).setMaterial(material).setEmission(new Color(115, 0, 240)),
+                        .setEmission(myPurple).setMaterial(material).setEmission(emmisionPurple),
                 new Sphere(new Point(-10, 20, -20), 5)
-                        .setEmission(new Color(127, 0, 255)).setMaterial(material).setEmission(new Color(115, 0, 240)),
+                        .setEmission(myPurple).setMaterial(material).setEmission(emmisionPurple),
                 new Sphere(new Point(20, 20, -20), 5)
-                        .setEmission(new Color(127, 0, 255)).setMaterial(material).setEmission(new Color(115, 0, 240)),
+                        .setEmission(myPurple).setMaterial(material).setEmission(emmisionPurple),
                 new Sphere(new Point(-20, 20, -20), 5)
-                        .setEmission(new Color(127, 0, 255)).setMaterial(material).setEmission(new Color(115, 0, 240)),
+                        .setEmission(myPurple).setMaterial(material).setEmission(emmisionPurple),
                 new Sphere(new Point(0, -20, -20), 5)
-                        .setEmission(new Color(127, 0, 255)).setMaterial(material).setEmission(new Color(115, 0, 240)),
+                        .setEmission(myPurple).setMaterial(material).setEmission(emmisionPurple),
                 new Sphere(new Point(10, -20, -20), 5)
-                        .setEmission(new Color(127, 0, 255)).setMaterial(material).setEmission(new Color(115, 0, 240)),
+                        .setEmission(myPurple).setMaterial(material).setEmission(emmisionPurple),
                 new Sphere(new Point(-10, -20, -20), 5)
-                        .setEmission(new Color(127, 0, 255)).setMaterial(material).setEmission(new Color(115, 0, 240)),
+                        .setEmission(myPurple).setMaterial(material).setEmission(emmisionPurple),
                 new Sphere(new Point(20, -20, -20), 5)
-                        .setEmission(new Color(127, 0, 255)).setMaterial(material).setEmission(new Color(115, 0, 240)),
+                        .setEmission(myPurple).setMaterial(material).setEmission(emmisionPurple),
                 new Sphere(new Point(-20, -20, -20), 5)
-                        .setEmission(new Color(127, 0, 255)).setMaterial(material).setEmission(new Color(115, 0, 240)),
+                        .setEmission(myPurple).setMaterial(material).setEmission(emmisionPurple),
 
-                /**-------משטח7------**/
+                /**-------5------**/
                 new Sphere(new Point(20, 0, -30), 5)
-                        .setEmission(new Color(255, 127, 0)).setMaterial(material).setEmission(new Color(240, 115, 0)),
+                        .setEmission(myOrange).setMaterial(material).setEmission(emmisionOrange),
                 new Sphere(new Point(-20, 0, -30), 5)
-                        .setEmission(new Color(255, 127, 0)).setMaterial(material).setEmission(new Color(240, 115, 0)),
+                        .setEmission(myOrange).setMaterial(material).setEmission(emmisionOrange),
                 new Sphere(new Point(20, 10, -30), 5)
-                        .setEmission(new Color(255, 127, 0)).setMaterial(material).setEmission(new Color(240, 115, 0)),
+                        .setEmission(myOrange).setMaterial(material).setEmission(emmisionOrange),
                 new Sphere(new Point(-20, 10, -30), 5)
-                        .setEmission(new Color(255, 127, 0)).setMaterial(material).setEmission(new Color(240, 115, 0)),
+                        .setEmission(myOrange).setMaterial(material).setEmission(emmisionOrange),
                 new Sphere(new Point(20, -10, -30), 5)
-                        .setEmission(new Color(255, 127, 0)).setMaterial(material).setEmission(new Color(240, 115, 0)),
+                        .setEmission(myOrange).setMaterial(material).setEmission(emmisionOrange),
                 new Sphere(new Point(-20, -10, -30), 5)
-                        .setEmission(new Color(255, 127, 0)).setMaterial(material).setEmission(new Color(240, 115, 0)),
+                        .setEmission(myOrange).setMaterial(material).setEmission(emmisionOrange),
                 new Sphere(new Point(0, 20, -30), 5)
-                        .setEmission(new Color(255, 127, 0)).setMaterial(material).setEmission(new Color(240, 115, 0)),
+                        .setEmission(myOrange).setMaterial(material).setEmission(emmisionOrange),
                 new Sphere(new Point(10, 20, -30), 5)
-                        .setEmission(new Color(255, 127, 0)).setMaterial(material).setEmission(new Color(240, 115, 0)),
+                        .setEmission(myOrange).setMaterial(material).setEmission(emmisionOrange),
                 new Sphere(new Point(-10, 20, -30), 5)
-                        .setEmission(new Color(255, 127, 0)).setMaterial(material).setEmission(new Color(240, 115, 0)),
+                        .setEmission(myOrange).setMaterial(material).setEmission(emmisionOrange),
                 new Sphere(new Point(20, 20, -30), 5)
-                        .setEmission(new Color(255, 127, 0)).setMaterial(material).setEmission(new Color(240, 115, 0)),
+                        .setEmission(myOrange).setMaterial(material).setEmission(emmisionOrange),
                 new Sphere(new Point(-20, 20, -30), 5)
-                        .setEmission(new Color(255, 127, 0)).setMaterial(material).setEmission(new Color(240, 115, 0)),
+                        .setEmission(myOrange).setMaterial(material).setEmission(emmisionOrange),
                 new Sphere(new Point(0, -20, -30), 5)
-                        .setEmission(new Color(255, 127, 0)).setMaterial(material).setEmission(new Color(240, 115, 0)),
+                        .setEmission(myOrange).setMaterial(material).setEmission(emmisionOrange),
                 new Sphere(new Point(10, -20, -30), 5)
-                        .setEmission(new Color(255, 127, 0)).setMaterial(material).setEmission(new Color(240, 115, 0)),
+                        .setEmission(myOrange).setMaterial(material).setEmission(emmisionOrange),
                 new Sphere(new Point(-10, -20, -30), 5)
-                        .setEmission(new Color(255, 127, 0)).setMaterial(material).setEmission(new Color(240, 115, 0)),
+                        .setEmission(myOrange).setMaterial(material).setEmission(emmisionOrange),
                 new Sphere(new Point(20, -20, -30), 5)
-                        .setEmission(new Color(255, 127, 0)).setMaterial(material).setEmission(new Color(240, 115, 0)),
+                        .setEmission(myOrange).setMaterial(material).setEmission(emmisionOrange),
                 new Sphere(new Point(-20, -20, -30), 5)
-                        .setEmission(new Color(255, 127, 0)).setMaterial(material).setEmission(new Color(240, 115, 0)),
+                        .setEmission(myOrange).setMaterial(material).setEmission(emmisionOrange),
 
                 new Plane(
                         new Point(-8, -13, -35),
@@ -240,7 +246,7 @@ public class mp1 {
                 )
                         .setEmission(new Color(160, 82, 45))
                         .setMaterial(new Material().setKd(0.1).setKs(0.8).setShininess(100)),
-
+                //mirror
                 new Plane(
                         new Point(-8, -80, -4),
                         new Point(-4, -80, -3),

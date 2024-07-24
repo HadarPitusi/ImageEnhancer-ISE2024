@@ -113,4 +113,25 @@ public class Color {
 
    @Override
    public String toString() { return "rgb:" + rgb; }
+
+
+   /**/////**/
+   public Boolean checkDelta(Color c) {
+      double rr = rgb.d1;
+      double rg = rgb.d2;
+      double rb = rgb.d3;
+      rr = rr- c.rgb.d1;
+      rg = rg - c.rgb.d2;
+      rb = rb - c.rgb.d3;
+
+      return (rr*rr <=4 && rg*rg <=4 && rb*rb <=4 );
+   }
+
+   public boolean equalsDelta(Object obj) {
+      if (this == obj) return true;
+      if (obj == null) return false;
+      if (!(obj instanceof Color)) return false;
+      Color other = (Color) obj;
+      return this.checkDelta(other);
+   }
 }

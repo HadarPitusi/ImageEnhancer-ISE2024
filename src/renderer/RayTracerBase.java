@@ -1,8 +1,11 @@
 package renderer;
 
 import primitives.Color;
+import primitives.Point;
 import primitives.Ray;
 import scene.Scene;
+
+import java.util.List;
 
 /**
  * Abstract base class for ray tracing.
@@ -29,4 +32,6 @@ public abstract class RayTracerBase {
      * @return the color at the intersection point
      */
     public abstract Color tracerRay(Ray ray);
+
+    public abstract Color adaptiveTraceRays(List<Ray> rays);
 }

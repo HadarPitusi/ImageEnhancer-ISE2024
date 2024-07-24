@@ -16,7 +16,7 @@ public class BonusStage7Test {
     private final Scene scene = new Scene("BonusStage7Test").setBackground(new Color(120, 140, 255));
 
     private final Camera.Builder cameraBuilder = Camera.getBuilder().setDirection(new Vector(1, 1, 0), new Vector(0, 0, 1))
-            .setRayTracer(new SimpleRayTracer(scene));
+            .setRayTracer(new SimpleRayTracer(scene)).setThreadsCount(1).setAntiAliasingRays(350).setSuperSempling(true);
 
     @Test
     void Bonus_stage_7() {

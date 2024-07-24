@@ -8,7 +8,9 @@ import primitives.Vector;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.MissingResourceException;
+import java.util.stream.IntStream;
 
+import static java.lang.Math.sqrt;
 import static primitives.Util.isZero;
 
 /**
@@ -25,6 +27,8 @@ public class Camera implements Cloneable {
     private ImageWriter imageWriter;
     private RayTracerBase rayTracer;
     private int antiAliasingRays = 1;
+    private int threadsCount = 0;
+    private boolean superSempling = false;
 
 
     /**
@@ -53,6 +57,8 @@ public class Camera implements Cloneable {
             this.camera.width = camera.width;
             this.camera.distance = camera.distance;
             this.camera.antiAliasingRays = camera.antiAliasingRays;
+            this.camera.threadsCount = camera.threadsCount;
+            this.camera.superSempling = camera.superSempling;
         }
 
         /**
@@ -141,6 +147,16 @@ public class Camera implements Cloneable {
          */
         public Builder setAntiAliasingRays(int antiAliasingRays) {
             this.camera.antiAliasingRays = antiAliasingRays;
+            return this;
+        }
+
+        public Builder setThreadsCount(int threadsCount) {
+            this.camera.threadsCount = threadsCount;
+            return this;
+        }
+
+        public Builder setSuperSempling(boolean superSempling) {
+            this.camera.superSempling = superSempling;
             return this;
         }
 
@@ -287,21 +303,68 @@ public class Camera implements Cloneable {
         int nx = imageWriter.getNx();
         int ny = imageWriter.getNy();
 
-        if (antiAliasingRays == 1) {
-            for (int i = 0; i < nx; i++) {
-                for (int j = 0; j < ny; j++) {
-                    castRay(nx, ny, i, j);
+        if (threadsCount == 0) {
+            if (antiAliasingRays == 1) {
+                if (!superSempling) { //ממש בלי כלום, תמונה בסיסית
+                    for (int i = 0; i < nx; i++) {
+                        for (int j = 0; j < ny; j++) {
+                            castRay(nx, ny, i, j);
+                        }
+                    }
+                }
+                //לא יכול להיות סופר סמפלינג בלי אנטי אלייסינג, כי שולחים רק קרן אחת.
+
+            } else {//עם אנטי אלייסינג
+                if (!superSempling) { //בלי סופר סמפלינג ובלי תהליכונים
+                    for (int i = 0; i < nx; i++) {
+                        for (int j = 0; j < ny; j++) {
+                            List<Ray> rays = this.constructRays(nx, ny, i, j);
+                            Color color = average(rays);
+                            this.imageWriter.writePixel(i, j, color);
+                        }
+                    }
+                }else{//עם סופר סמפלינג
+                    for (int i = 0; i < nx; i++) {
+                        for (int j = 0; j < ny; j++) {
+                            // construct a ray through the current pixel
+                            List<Ray> rays = this.constructRays(nx, ny, i, j);
+                            // get the  color of the point from trace ray
+                            Color color = this.rayTracer.adaptiveTraceRays(rays);
+                            // write the pixel color to the image
+                            imageWriter.writePixel(i, j, color);
+                        }
+                    }
                 }
             }
-        } else {
-            for (int i = 0; i < nx; i++) {
-                for (int j = 0; j < ny; j++) {
-                    List<Ray> rays = this.constructRays(nx, ny, i, j);
-                    Color color = average(rays);
-                    this.imageWriter.writePixel(i, j, color);
+        } else {//עם תהליכונים
+            if (antiAliasingRays == 1) { //אין סופר סמפלינג, כנל
+                IntStream.range(0, ny).parallel() //
+                        .forEach(i -> IntStream.range(0, nx).parallel() //
+                                .forEach(j -> castRay(nx, ny, i, j)));
+            } else { //גם תהליכונים וגם אנטי אלייסינג
+                if(!superSempling){
+                    IntStream.range(0, ny).parallel() //
+                            .forEach(i -> IntStream.range(0, nx).parallel() //
+                                    .forEach(j -> {
+                                        List<Ray> rays = this.constructRays(nx, ny, i, j);
+                                        Color color = average(rays);
+                                        this.imageWriter.writePixel(i, j, color);
+                                    }));
+                }else{ //כולל הכל
+                    IntStream.range(0, ny).parallel() //
+                            .forEach(i -> IntStream.range(0, nx).parallel() //
+                                    .forEach(j -> {
+                                        List<Ray> rays = this.constructRays(nx, ny, i, j);
+                                        // get the  color of the point from trace ray
+                                        Color color = this.rayTracer.adaptiveTraceRays(rays);
+                                        // write the pixel color to the image
+                                        imageWriter.writePixel(i, j, color);
+                                    }));
                 }
             }
         }
+
+
         return this;
     }
 

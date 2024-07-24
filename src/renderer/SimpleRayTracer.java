@@ -1,18 +1,16 @@
 package renderer;
 
-import primitives.Ray;
+import geometries.Intersectable;
+import primitives.*;
 import scene.Scene;
-import primitives.Color;
-import primitives.Double3;
-import primitives.Material;
 import geometries.Intersectable.GeoPoint;
 import lighting.LightSource;
-import primitives.Vector;
 
 import static lighting.PointLight.softShadowsRays;
 import static primitives.Util.alignZero;
 import static java.lang.Math.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -233,5 +231,69 @@ public class SimpleRayTracer extends RayTracerBase {
             }
         }
         return ktr;
+    }
+
+    public Color adaptiveSuperSampling(List<Ray> rays, int level_of_adaptive, int ray1Index, int ray2Index, int ray3Index, int ray4Index, int numOfSampleRays) {
+        int numOfAdaptiveRays = 5;
+
+        Ray centerRay = rays.get(rays.size() - 1); //get the center screen ray
+        Color centerColor = tracerRay(centerRay); //get the color of the center
+        Ray ray1 = rays.get(ray1Index);  //get the up and right screen ray
+        Color color1 = tracerRay(ray1); //get the color of the up and right
+        Ray ray2 = rays.get(ray2Index); //get the up and left ray
+        Color color2 = tracerRay(ray2);//get the color of the up and left
+        Ray ray3 = rays.get(ray3Index);//get the bottom and left ray
+        Color color3 = tracerRay(ray3);//get the color of the bottom and left
+        Ray ray4 = rays.get(ray4Index);//get the bottom and right ray
+        Color color4 = tracerRay(ray4);//get the color of the bottom and right
+
+        if (level_of_adaptive == 0) {
+            //Calculate the average color of the corners and the center
+            centerColor = centerColor.add(color1, color2, color3, color4);
+            return centerColor.reduce(numOfAdaptiveRays);
+        }
+
+        //If the corner color is the same as the center color, returns the center color
+        if (color1.equalsDelta(centerColor) && color2.equalsDelta(centerColor) && color3.equalsDelta(centerColor) && color4.equalsDelta(centerColor)) {
+            return centerColor;
+        }
+
+        //Otherwise, for each color that is different from the center, the recursion goes down to the depth of the pixel and sums up
+        // the colors until it gets the same color as the center color,
+        else {
+            if (!color1.equalsDelta(centerColor)) {
+                color1 = color1.add(adaptiveSuperSampling(rays, level_of_adaptive - 1, ray1Index - (numOfSampleRays + 1), ray2Index, ray3Index, ray4Index, numOfSampleRays));
+                color1 = color1.reduce(2);
+            }
+            if (!color2.equalsDelta(centerColor)) {
+                ;
+                color2 = color2.add(adaptiveSuperSampling(rays, level_of_adaptive - 1, ray1Index, ray2Index - (numOfSampleRays - 1), ray3Index, ray4Index, numOfSampleRays));
+                color2 = color2.reduce(2);
+            }
+            if (!color3.equalsDelta(centerColor)) {
+                color3 = color3.add(adaptiveSuperSampling(rays, level_of_adaptive - 1, ray1Index, ray2Index, ray3Index + (numOfSampleRays + 1), ray4Index, numOfSampleRays));
+                color3 = color3.reduce(2);
+            }
+            if (!color4.equalsDelta(centerColor)) {
+                color4 = color4.add(adaptiveSuperSampling(rays, level_of_adaptive - 1, ray1Index, ray2Index, ray3Index, ray4Index + (numOfSampleRays - 1), numOfSampleRays));
+                color4 = color4.reduce(2);
+            }
+            //Calculate and return the average color
+            centerColor = centerColor.add(color1, color2, color3, color4);
+
+            return centerColor.reduce(numOfAdaptiveRays);
+        }
+    }
+
+    @Override
+    public Color adaptiveTraceRays(List<Ray> rays) {
+        int numOfSampleRays = (int)sqrt(rays.size());
+        int ray1Index = (numOfSampleRays - 1) * numOfSampleRays + (numOfSampleRays - 1); //the index of the up and right ray
+        int ray2Index = (numOfSampleRays - 1) * numOfSampleRays;  //the index of the up and left ray
+        int ray3Index = 0;  //the index of the button and left ray
+        int ray4Index = (numOfSampleRays - 1);  // the index of the button and right ray
+
+        Color color = adaptiveSuperSampling(rays, 3, ray1Index, ray2Index, ray3Index, ray4Index, numOfSampleRays); //calculate the color for the pixel
+        return color;
     }
 }
