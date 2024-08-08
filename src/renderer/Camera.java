@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.MissingResourceException;
 import java.util.stream.IntStream;
 
-import static java.lang.Math.sqrt;
 import static primitives.Util.isZero;
 
 /**
@@ -27,7 +26,7 @@ public class Camera implements Cloneable {
     private ImageWriter imageWriter;
     private RayTracerBase rayTracer;
     private int antiAliasingRays = 1;
-    private int threadsCount = 0;
+    private boolean multiThreading = false;
     private boolean superSempling = false;
 
 
@@ -57,7 +56,7 @@ public class Camera implements Cloneable {
             this.camera.width = camera.width;
             this.camera.distance = camera.distance;
             this.camera.antiAliasingRays = camera.antiAliasingRays;
-            this.camera.threadsCount = camera.threadsCount;
+            this.camera.multiThreading = camera.multiThreading;
             this.camera.superSempling = camera.superSempling;
         }
 
@@ -140,7 +139,7 @@ public class Camera implements Cloneable {
         }
 
         /**
-         * Sets the number of rays for anti-aliasing.
+         * Sets the number of rays for antialiasing.
          *
          * @param antiAliasingRays the number of rays to set for anti-aliasing. Must be greater than 0.
          * @return the current Builder instance for method chaining.
@@ -150,15 +149,28 @@ public class Camera implements Cloneable {
             return this;
         }
 
-        public Builder setThreadsCount(int threadsCount) {
-            this.camera.threadsCount = threadsCount;
+        /**
+         * Enables or disables multi threading.
+         *
+         * @param multiThreading true to enable multi threading, false to disable.
+         * @return the current Builder instance for method chaining.
+         */
+        public Builder setMultiThreading(boolean multiThreading) {
+            this.camera.multiThreading = multiThreading;
             return this;
         }
 
+        /**
+         * Enables or disables super sampling.
+         *
+         * @param superSempling true to enable super sampling, false to disable.
+         * @return the current Builder instance for method chaining.
+         */
         public Builder setSuperSempling(boolean superSempling) {
             this.camera.superSempling = superSempling;
             return this;
         }
+
 
         /**
          * Builds and returns the Camera instance.
@@ -294,8 +306,7 @@ public class Camera implements Cloneable {
 
     /**
      * Renders the image by casting rays through each pixel and computing the color
-     * based on the scene's objects and lights. This method supports anti-aliasing
-     * by casting multiple rays per pixel and averaging the colors.
+     * based on the scene's objects and lights. This method supports anti-aliasing and multi threading.
      *
      * @return the current Camera instance for method chaining.
      */
@@ -303,19 +314,21 @@ public class Camera implements Cloneable {
         int nx = imageWriter.getNx();
         int ny = imageWriter.getNy();
 
-        if (threadsCount == 0) {
+        if (!multiThreading) {
             if (antiAliasingRays == 1) {
-                if (!superSempling) { //ממש בלי כלום, תמונה בסיסית
+                if (!superSempling) {
+                    //Basic image without enhancements in camera.
                     for (int i = 0; i < nx; i++) {
                         for (int j = 0; j < ny; j++) {
                             castRay(nx, ny, i, j);
                         }
                     }
                 }
-                //לא יכול להיות סופר סמפלינג בלי אנטי אלייסינג, כי שולחים רק קרן אחת.
+                //There can't be super sampling without anti-aliasing, because only one beam is sent.
 
-            } else {//עם אנטי אלייסינג
-                if (!superSempling) { //בלי סופר סמפלינג ובלי תהליכונים
+            } else {    //with anti-aliasing
+                if (!superSempling) {
+                    //without anti-aliasing and multi threading
                     for (int i = 0; i < nx; i++) {
                         for (int j = 0; j < ny; j++) {
                             List<Ray> rays = this.constructRays(nx, ny, i, j);
@@ -323,36 +336,35 @@ public class Camera implements Cloneable {
                             this.imageWriter.writePixel(i, j, color);
                         }
                     }
-                }else{//עם סופר סמפלינג
+                } else {  //with super sempling
                     for (int i = 0; i < nx; i++) {
                         for (int j = 0; j < ny; j++) {
                             // construct a ray through the current pixel
                             List<Ray> rays = this.constructRays(nx, ny, i, j);
                             // get the  color of the point from trace ray
                             Color color = this.rayTracer.adaptiveTraceRays(rays);
-                            // write the pixel color to the image
                             imageWriter.writePixel(i, j, color);
                         }
                     }
                 }
             }
-        } else {//עם תהליכונים
-            if (antiAliasingRays == 1) { //אין סופר סמפלינג, כנל
-                IntStream.range(0, ny).parallel() //
-                        .forEach(i -> IntStream.range(0, nx).parallel() //
+        } else {     //with multi threading
+            if (antiAliasingRays == 1) {  //without super sempling
+                IntStream.range(0, ny).parallel()
+                        .forEach(i -> IntStream.range(0, nx).parallel()
                                 .forEach(j -> castRay(nx, ny, i, j)));
-            } else { //גם תהליכונים וגם אנטי אלייסינג
-                if(!superSempling){
-                    IntStream.range(0, ny).parallel() //
-                            .forEach(i -> IntStream.range(0, nx).parallel() //
+            } else {  //with anti-aliasing
+                if (!superSempling) {
+                    IntStream.range(0, ny).parallel()
+                            .forEach(i -> IntStream.range(0, nx).parallel()
                                     .forEach(j -> {
                                         List<Ray> rays = this.constructRays(nx, ny, i, j);
                                         Color color = average(rays);
                                         this.imageWriter.writePixel(i, j, color);
                                     }));
-                }else{ //כולל הכל
-                    IntStream.range(0, ny).parallel() //
-                            .forEach(i -> IntStream.range(0, nx).parallel() //
+                } else { //all of the enhancements in camera.
+                    IntStream.range(0, ny).parallel()
+                            .forEach(i -> IntStream.range(0, nx).parallel()
                                     .forEach(j -> {
                                         List<Ray> rays = this.constructRays(nx, ny, i, j);
                                         // get the  color of the point from trace ray
@@ -363,7 +375,6 @@ public class Camera implements Cloneable {
                 }
             }
         }
-
 
         return this;
     }

@@ -69,7 +69,6 @@ public class PointLight extends Light implements LightSource {
         this.position = position;
     }
 
-
     /**
      * Sets the number of rays used for soft shadows.
      * @param softShadowsRays the number of rays to set for soft shadows. Must be greater than 0.

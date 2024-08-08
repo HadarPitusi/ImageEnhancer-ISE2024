@@ -33,5 +33,11 @@ public abstract class RayTracerBase {
      */
     public abstract Color tracerRay(Ray ray);
 
+    /**
+     * Performs adaptive ray tracing on a given list of rays and returns the calculated color.
+     *
+     * @param rays A list of objects to trace for color calculation.
+     * @return The resulting color from the adaptive super sampling process.
+     */
     public abstract Color adaptiveTraceRays(List<Ray> rays);
 }
