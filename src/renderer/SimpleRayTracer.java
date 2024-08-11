@@ -184,8 +184,9 @@ public class SimpleRayTracer extends RayTracerBase {
         if (nv == 0) return color;
 
         for (LightSource lightSource : scene.lights) {
-            List<Vector> vectors = (softShadowsRays == 0) ? List.of(lightSource.getL(geoPoint.point))
-                    : lightSource.getLBeam(geoPoint.point);
+          //  List<Vector> vectors = (softShadowsRays == 0) ? List.of(lightSource.getL(geoPoint.point))
+            //        : lightSource.getLBeam(geoPoint.point);
+            List<Vector> vectors =List.of(lightSource.getL(geoPoint.point));
 
             Material material = geoPoint.geometry.getMaterial();
             for (Vector l : vectors) {

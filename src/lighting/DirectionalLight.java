@@ -46,9 +46,9 @@ public class DirectionalLight extends Light implements LightSource {
         return Double.POSITIVE_INFINITY;
     }
 
-    @Override
+   /** @Override
     public List<Vector> getLBeam(Point p) {
         return List.of(getL(p));
-    }
+    }**/
 }
 

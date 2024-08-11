@@ -130,7 +130,7 @@ public class PointLight extends Light implements LightSource {
         return this.position.distance(point);
     }
 
-    @Override
+   /** @Override
     public List<Vector> getLBeam(Point point) {
         if (lengthOfTheSide == 0) return List.of(getL(point));
 
@@ -162,6 +162,6 @@ public class PointLight extends Light implements LightSource {
             }
         }
         return vectors;
-    }
+    }**/
 
 }

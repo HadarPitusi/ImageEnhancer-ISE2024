@@ -46,5 +46,5 @@ public interface LightSource {
      * @param point the point from which to calculate the light beam vectors.
      * @return a list of vectors representing the directions of the light beams.
      */
-    List<Vector> getLBeam(Point point);
+   // List<Vector> getLBeam(Point point);
 }

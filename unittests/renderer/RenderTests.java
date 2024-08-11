@@ -46,36 +46,6 @@ public class RenderTests {
          .writeToImage();
    }
 
-   /**Test for XML based scene - for bonus */
-   /**@Test
-   public void basicRenderXml() {
-      // enter XML file name and parse from XML file into scene object
-      // using the code you added in appropriate packages
-      // ...
-      // NB: unit tests is not the correct place to put XML parsing code
-
-      camera
-         .setImageWriter(new ImageWriter("xml render test", 1000, 1000))
-         .build()
-         .renderImage()
-         .printGrid(100, new Color(YELLOW))
-         .writeToImage();
-
-
-      //SceneXMLParser SceneXMLParser;
-      Scene scene = SceneXMLParser.parse("src/main/resources/renderTestTwoColors.xml");
-
-      ImageWriter imageWriter = new ImageWriter("renderTest", 1000, 1000);
-     // Camera camera = new Camera(new Point(0, 0, 0), new Vector(0, 1, 0), new Vector(0, 0, -1));
-      RayTracerBase tracer = new SimpleRayTracer(scene);
-
-      camera.setImageWriter(imageWriter).setRayTracer(tracer)
-                      .build()
-      .renderImage()
-      .printGrid(100, new Color(YELLOW)) // ודא שהמחלקה Color תומכת בערכים אלו
-      .writeToImage();
-   }**/
-
 
    // For stage 6 - please disregard in stage 5
    /**

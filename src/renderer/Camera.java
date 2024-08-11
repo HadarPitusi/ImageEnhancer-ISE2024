@@ -328,7 +328,7 @@ public class Camera implements Cloneable {
 
             } else {    //with anti-aliasing
                 if (!superSempling) {
-                    //without anti-aliasing and multi threading
+                    //without super sempling and multi threading
                     for (int i = 0; i < nx; i++) {
                         for (int j = 0; j < ny; j++) {
                             List<Ray> rays = this.constructRays(nx, ny, i, j);

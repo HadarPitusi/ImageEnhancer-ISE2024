@@ -15,7 +15,7 @@ import java.io.File;
 
 public class SceneXMLParser {
 
-    public static Scene parse(String xmlFilePath) {
+    /**public static Scene parse(String xmlFilePath) {
         Scene scene = new Scene("xmlTry");
 
         try {
@@ -65,5 +65,5 @@ public class SceneXMLParser {
         }
 
         return scene;
-    }
+    }**/
 }

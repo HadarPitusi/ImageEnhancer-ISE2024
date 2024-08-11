@@ -18,7 +18,7 @@ public class mp1 {
             Camera.getBuilder().
                     setDirection(new Vector(-8, -8, -3), new Vector(-100, -100, 533.3333333333333))
                     .setRayTracer(new SimpleRayTracer(scene)).
-                    setMultiThreading(true).setSuperSempling(true).setAntiAliasingRays(10);
+                    setMultiThreading(true).setSuperSempling(true).setAntiAliasingRays(33);
 
     @Test
     public void mpTest() {
@@ -101,7 +101,7 @@ public class mp1 {
                         .setEmission(myStrongGreen).setMaterial(material).setEmission(emmisionStrongGreen),
 
                 /**-------2-------**/
-               /** new Sphere(new Point(20, 0, 0), 5)
+                new Sphere(new Point(20, 0, 0), 5)
                         .setEmission(new Color(GREEN)).setMaterial(material).setEmission(emmisionGreen),
                 new Sphere(new Point(-20, 0, 0), 5)
                         .setEmission(new Color(GREEN)).setMaterial(material).setEmission(emmisionGreen),
@@ -132,10 +132,10 @@ public class mp1 {
                 new Sphere(new Point(20, -20, 0), 5)
                         .setEmission(new Color(GREEN)).setMaterial(material).setEmission(emmisionGreen),
                 new Sphere(new Point(-20, -20, 0), 5)
-                        .setEmission(new Color(GREEN)).setMaterial(material).setEmission(emmisionGreen),**/
+                        .setEmission(new Color(GREEN)).setMaterial(material).setEmission(emmisionGreen),
 
                 /**-------3-------**/
-               /** new Sphere(new Point(20, 0, -10), 5)
+                new Sphere(new Point(20, 0, -10), 5)
                         .setEmission(new Color(BLUE)).setMaterial(material).setEmission(emmisionBlue),
                 new Sphere(new Point(-20, 0, -10), 5)
                         .setEmission(new Color(BLUE)).setMaterial(material).setEmission(emmisionBlue),
@@ -166,10 +166,10 @@ public class mp1 {
                 new Sphere(new Point(20, -20, -10), 5)
                         .setEmission(new Color(BLUE)).setMaterial(material).setEmission(emmisionBlue),
                 new Sphere(new Point(-20, -20, -10), 5)
-                        .setEmission(new Color(BLUE)).setMaterial(material).setEmission(emmisionBlue),**/
+                        .setEmission(new Color(BLUE)).setMaterial(material).setEmission(emmisionBlue),
 
                 /**------4------**/
-              /**  new Sphere(new Point(20, 0, -20), 5)
+                new Sphere(new Point(20, 0, -20), 5)
                         .setEmission(myPurple).setMaterial(material).setEmission(emmisionPurple),
                 new Sphere(new Point(-20, 0, -20), 5)
                         .setEmission(myPurple).setMaterial(material).setEmission(emmisionPurple),
@@ -200,39 +200,39 @@ public class mp1 {
                 new Sphere(new Point(20, -20, -20), 5)
                         .setEmission(myPurple).setMaterial(material).setEmission(emmisionPurple),
                 new Sphere(new Point(-20, -20, -20), 5)
-                        .setEmission(myPurple).setMaterial(material).setEmission(emmisionPurple), **/
+                        .setEmission(myPurple).setMaterial(material).setEmission(emmisionPurple),
 
                 /**-------5------**/
-              /**  new Sphere(new Point(20, 0, -30), 5)
+                new Sphere(new Point(20, 0, -30), 5)
                         .setEmission(myOrange).setMaterial(material).setEmission(emmisionOrange),
                 new Sphere(new Point(-20, 0, -30), 5)
                         .setEmission(myOrange).setMaterial(material).setEmission(emmisionOrange),
-                new Sphere(new Point(-10, 0, -30), 5)
-                        .setEmission(myOrange).setMaterial(material).setEmission(emmisionOrange),
-                new Sphere(new Point(10, 0, -30), 5)
-                        .setEmission(myOrange).setMaterial(material).setEmission(emmisionOrange),
-                new Sphere(new Point(0, 0, -30), 5)
-                        .setEmission(myOrange).setMaterial(material).setEmission(emmisionOrange),
+                //  new Sphere(new Point(-10, 0, -30), 5)
+                //        .setEmission(myOrange).setMaterial(material).setEmission(emmisionOrange),
+                //    new Sphere(new Point(10, 0, -30), 5)
+                //          .setEmission(myOrange).setMaterial(material).setEmission(emmisionOrange),
+                // new Sphere(new Point(0, 0, -30), 5)
+                //      .setEmission(myOrange).setMaterial(material).setEmission(emmisionOrange),
                 new Sphere(new Point(20, 10, -30), 5)
                         .setEmission(myOrange).setMaterial(material).setEmission(emmisionOrange),
                 new Sphere(new Point(-20, 10, -30), 5)
                         .setEmission(myOrange).setMaterial(material).setEmission(emmisionOrange),
-                new Sphere(new Point(-10, 10, -30), 5)
-                        .setEmission(myOrange).setMaterial(material).setEmission(emmisionOrange),
-                new Sphere(new Point(10, 10, -30), 5)
-                        .setEmission(myOrange).setMaterial(material).setEmission(emmisionOrange),
-                new Sphere(new Point(0, 10, -30), 5)
-                        .setEmission(myOrange).setMaterial(material).setEmission(emmisionOrange),
+                // new Sphere(new Point(-10, 10, -30), 5)
+                //       .setEmission(myOrange).setMaterial(material).setEmission(emmisionOrange),
+                //  new Sphere(new Point(10, 10, -30), 5)
+                //            .setEmission(myOrange).setMaterial(material).setEmission(emmisionOrange),
+                /// new Sphere(new Point(0, 10, -30), 5)
+                //      .setEmission(myOrange).setMaterial(material).setEmission(emmisionOrange),
                 new Sphere(new Point(20, -10, -30), 5)
                         .setEmission(myOrange).setMaterial(material).setEmission(emmisionOrange),
                 new Sphere(new Point(-20, -10, -30), 5)
                         .setEmission(myOrange).setMaterial(material).setEmission(emmisionOrange),
-                new Sphere(new Point(-10, -10, -30), 5)
-                        .setEmission(myOrange).setMaterial(material).setEmission(emmisionOrange),
-                new Sphere(new Point(10, -10, -30), 5)
-                        .setEmission(myOrange).setMaterial(material).setEmission(emmisionOrange),
-                new Sphere(new Point(0, -10, -30), 5)
-                        .setEmission(myOrange).setMaterial(material).setEmission(emmisionOrange),
+                //  new Sphere(new Point(-10, -10, -30), 5)
+                //        .setEmission(myOrange).setMaterial(material).setEmission(emmisionOrange),
+                //new Sphere(new Point(10, -10, -30), 5)
+                //      .setEmission(myOrange).setMaterial(material).setEmission(emmisionOrange),
+                // new Sphere(new Point(0, -10, -30), 5)
+                //       .setEmission(myOrange).setMaterial(material).setEmission(emmisionOrange),
                 new Sphere(new Point(0, 20, -30), 5)
                         .setEmission(myOrange).setMaterial(material).setEmission(emmisionOrange),
                 new Sphere(new Point(10, 20, -30), 5)
@@ -252,7 +252,7 @@ public class mp1 {
                 new Sphere(new Point(20, -20, -30), 5)
                         .setEmission(myOrange).setMaterial(material).setEmission(emmisionOrange),
                 new Sphere(new Point(-20, -20, -30), 5)
-                        .setEmission(myOrange).setMaterial(material).setEmission(emmisionOrange),**/
+                        .setEmission(myOrange).setMaterial(material).setEmission(emmisionOrange),
 
 
                 new Plane(
@@ -283,7 +283,7 @@ public class mp1 {
                 .setLocation(new Point(100, 100, 30))
                 .setVpDistance(80)
                 .setVpSize(80, 80)
-                .setImageWriter(new ImageWriter("minip", 500, 500))
+                .setImageWriter(new ImageWriter("minip", 1000, 1000))
                 .build()
                 .renderImage()
                 .writeToImage();
