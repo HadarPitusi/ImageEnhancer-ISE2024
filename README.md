@@ -1,4 +1,4 @@
-## SOFTWARE ENGINEERING COURSE PROJECT
+## SOFTWARE ENGINEERING COURSE PROJECT |2024, JCT 
 - Image Enhancement and Optimization
 - Developed and optimized image enhancement algorithms with a focus
  on performance.
