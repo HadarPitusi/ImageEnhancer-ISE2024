@@ -1,0 +1,12 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\.idea",
+    "\\images",
+    "\\src",
+    "\\unittests",
+    "\\unittests\\geometries"
+  ],
+  "SelectedNode": "\\unittests\\geometries\\PlaneTest.java",
+  "PreviewInSolutionExplorer": false
+}
