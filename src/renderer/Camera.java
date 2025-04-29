@@ -438,7 +438,7 @@ public class Camera implements Cloneable {
 
     /**
      * Finds the location of the central point of a specified pixel.
-     *
+     *כ
      * @param numXPixels the number of pixels along the horizontal axis (width) of the screen.
      * @param numYPixels the number of pixels along the vertical axis (height) of the screen.
      * @param i          the x coordinate of the pixel
